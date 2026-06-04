@@ -1,0 +1,12 @@
+model_adapter,model,candidate_id,candidate_band,attempted,parsed,invalid_or_unparsed,errors,labels_observed,is_order_sensitive,flip_count
+ollama,gpt-oss:20b,cand_borderline_01,borderline,5,5,0,0,technical_screen,False,0
+ollama,gpt-oss:20b,cand_borderline_02,borderline,5,5,0,0,technical_screen,False,0
+ollama,gpt-oss:20b,cand_borderline_03,borderline,5,5,0,0,no_technical_screen;technical_screen,True,1
+ollama,gpt-oss:20b,cand_borderline_04,borderline,5,5,0,0,no_technical_screen;technical_screen,True,1
+ollama,gpt-oss:20b,cand_borderline_05,borderline,5,5,0,0,technical_screen,False,0
+ollama,gpt-oss:20b,cand_strong_01,obvious_strong,5,5,0,0,technical_screen,False,0
+ollama,gpt-oss:20b,cand_strong_02,obvious_strong,5,5,0,0,technical_screen,False,0
+ollama,gpt-oss:20b,cand_strong_03,obvious_strong,5,5,0,0,technical_screen,False,0
+ollama,gpt-oss:20b,cand_weak_01,obvious_weak,5,5,0,0,no_technical_screen,False,0
+ollama,gpt-oss:20b,cand_weak_02,obvious_weak,5,5,0,0,no_technical_screen,False,0
+ollama,gpt-oss:20b,cand_weak_03,obvious_weak,5,5,0,0,no_technical_screen,False,0

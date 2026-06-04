@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "lab_id": "recruiter_screen_order_sensitivity",
+  "description": "Synthetic prompt-engineering fixture for measuring whether few-shot exemplar order changes fake-candidate technical-screen classifications.",
+  "labels": ["technical_screen", "no_technical_screen"],
+  "target_role": "generic technical role",
+  "safety_note": "All examples and candidates are fictional. Do not use this as a real hiring model or candidate-screening tool.",
+  "rubric": {
+    "advance_when_at_least_two": [
+      "hands-on software, ML, data, cloud, security, or infrastructure implementation",
+      "concrete technical artifacts such as shipped systems, repos, demos, metrics, papers with code, or production ownership",
+      "role-relevant stack depth rather than only tool name-dropping",
+      "evidence of debugging, evaluation, deployment, or operational ownership"
+    ],
+    "do_not_advance_when_mostly": [
+      "vague interest without artifacts",
+      "only coursework or certificates with no implementation evidence",
+      "mostly coordination, policy, sales, or management with weak technical signal",
+      "mismatched background for the target technical role"
+    ]
+  },
+  "examples": [
+    {
+      "id": "ex_pos_strong_01",
+      "label": "technical_screen",
+      "strength": "strong",
+      "summary": "Candidate Alpha built a small incident-triage web app with Python, SQLite, and a queue worker, wrote tests for the parser, deployed it on a rented VM, and documented latency and failure cases from a week of synthetic load.",
+      "rationale": "Hands-on implementation, deployment, tests, and evaluation evidence meet the technical-screen rubric."
+    },
+    {
+      "id": "ex_pos_moderate_01",
+      "label": "technical_screen",
+      "strength": "moderate",
+      "summary": "Candidate Bravo created two public demo projects: a React dashboard consuming a REST API and a notebook that compares three baseline classifiers on a toy dataset. The notes explain bugs fixed during data cleaning and why one metric was misleading.",
+      "rationale": "The demos, stack depth, and debugging/evaluation notes provide enough technical artifact signal for a screen."
+    },
+    {
+      "id": "ex_neg_vague_01",
+      "label": "no_technical_screen",
+      "strength": "clear",
+      "summary": "Candidate Charlie is excited about technology, completed several introductory online certificates, and says they are eager to learn cloud and AI tools, but provides no code samples, shipped projects, technical writeups, or implementation details.",
+      "rationale": "Interest and certificates without artifacts or implementation evidence are not enough for a technical screen."
+    },
+    {
+      "id": "ex_neg_mismatch_01",
+      "label": "no_technical_screen",
+      "strength": "clear",
+      "summary": "Candidate Delta led vendor coordination for an internal software rollout, scheduled stakeholder meetings, and wrote adoption updates, but did not own technical design, write code, debug systems, or evaluate infrastructure behavior.",
+      "rationale": "Coordination experience without hands-on technical ownership is weak signal for this generic technical screen."
+    }
+  ],
+  "order_variants": [
+    {
+      "id": "alternating",
+      "description": "Alternating labels: technical, no, technical, no.",
+      "example_ids": ["ex_pos_strong_01", "ex_neg_vague_01", "ex_pos_moderate_01", "ex_neg_mismatch_01"]
+    },
+    {
+      "id": "positive_first_grouped",
+      "description": "Grouped positives first: technical, technical, no, no.",
+      "example_ids": ["ex_pos_strong_01", "ex_pos_moderate_01", "ex_neg_vague_01", "ex_neg_mismatch_01"]
+    },
+    {
+      "id": "negative_first_grouped",
+      "description": "Grouped negatives first: no, no, technical, technical.",
+      "example_ids": ["ex_neg_vague_01", "ex_neg_mismatch_01", "ex_pos_strong_01", "ex_pos_moderate_01"]
+    },
+    {
+      "id": "strong_positive_last",
+      "description": "Recency stress with strongest technical example last.",
+      "example_ids": ["ex_neg_vague_01", "ex_pos_moderate_01", "ex_neg_mismatch_01", "ex_pos_strong_01"]
+    },
+    {
+      "id": "strong_negative_last",
+      "description": "Recency stress with clearest no-screen example last.",
+      "example_ids": ["ex_pos_strong_01", "ex_neg_vague_01", "ex_pos_moderate_01", "ex_neg_mismatch_01"]
+    }
+  ],
+  "candidates": [
+    {
+      "id": "cand_strong_01",
+      "band": "obvious_strong",
+      "summary": "Candidate Echo built a command-line log analyzer in Go, added benchmarks after a slow regex path caused timeouts, containerized the tool, and published a short writeup with before-and-after performance numbers.",
+      "expected_stability": "stable_technical_screen",
+      "notes": "Strong artifact, debugging, deployment, and measurement signal."
+    },
+    {
+      "id": "cand_strong_02",
+      "band": "obvious_strong",
+      "summary": "Candidate Foxtrot maintains a small data pipeline that ingests public transit feeds, validates malformed records, writes alerts to a dashboard, and includes tests for edge-case timestamps and duplicate events.",
+      "expected_stability": "stable_technical_screen",
+      "notes": "Hands-on data/system ownership with tests and operational behavior."
+    },
+    {
+      "id": "cand_strong_03",
+      "band": "obvious_strong",
+      "summary": "Candidate Golf built a toy retrieval assistant with a FastAPI service, vector index, evaluation set, and regression checks showing when prompt edits changed answer grounding.",
+      "expected_stability": "stable_technical_screen",
+      "notes": "Implementation plus evaluation harness signal should be clearly screen-worthy."
+    },
+    {
+      "id": "cand_weak_01",
+      "band": "obvious_weak",
+      "summary": "Candidate Hotel recently became interested in software work, has watched many tutorials, and lists Python, Kubernetes, and machine learning as interests, but shares no projects, code, technical decisions, or troubleshooting examples.",
+      "expected_stability": "stable_no_technical_screen",
+      "notes": "Tool-name interest without artifacts."
+    },
+    {
+      "id": "cand_weak_02",
+      "band": "obvious_weak",
+      "summary": "Candidate India managed status reports for a platform migration, tracked risks in spreadsheets, and coordinated meeting notes. The summary does not mention coding, system design, debugging, deployment, or technical evaluation ownership.",
+      "expected_stability": "stable_no_technical_screen",
+      "notes": "Coordination-heavy and weak hands-on technical signal."
+    },
+    {
+      "id": "cand_weak_03",
+      "band": "obvious_weak",
+      "summary": "Candidate Juliet completed an introductory cloud certificate and says they want to move into engineering, but their only described work is customer training and writing nontechnical adoption guides.",
+      "expected_stability": "stable_no_technical_screen",
+      "notes": "Coursework and enablement without implementation."
+    },
+    {
+      "id": "cand_borderline_01",
+      "band": "borderline",
+      "summary": "Candidate Kilo built a weekend Flask app that calls a public API and stores results in Postgres. The app runs locally and has a README, but there are no tests, deployment notes, or discussion of failures beyond one sentence about fixing authentication headers.",
+      "expected_stability": "possibly_unstable",
+      "notes": "Some implementation evidence, limited evaluation/operational depth."
+    },
+    {
+      "id": "cand_borderline_02",
+      "band": "borderline",
+      "summary": "Candidate Lima has two notebooks from a data bootcamp and one GitHub repo that cleans a messy CSV, trains a simple model, and explains why accuracy was not enough. The work is small and classroom-shaped, but the explanation includes real debugging choices.",
+      "expected_stability": "possibly_unstable",
+      "notes": "Classroom-sized artifact with some evaluation judgment."
+    },
+    {
+      "id": "cand_borderline_03",
+      "band": "borderline",
+      "summary": "Candidate Mike was a technical project coordinator who occasionally wrote SQL checks and small Python scripts to compare deployment inventories. They did not own the service, but their notes describe finding mismatched records and automating a weekly validation task.",
+      "expected_stability": "possibly_unstable",
+      "notes": "Mixed coordination background with some hands-on automation."
+    },
+    {
+      "id": "cand_borderline_04",
+      "band": "borderline",
+      "summary": "Candidate November forked an open-source monitoring demo, changed alert thresholds, added a Docker Compose file, and wrote a blog-style walkthrough. The summary does not show original system design, tests, or production operation.",
+      "expected_stability": "possibly_unstable",
+      "notes": "Hands-on but derivative; reasonable place to test order sensitivity."
+    },
+    {
+      "id": "cand_borderline_05",
+      "band": "borderline",
+      "summary": "Candidate Oscar supported a help desk automation project by writing a few shell scripts, documenting runbooks, and manually checking logs during rollout. They can describe failures they observed, but the technical scope appears narrow.",
+      "expected_stability": "possibly_unstable",
+      "notes": "Narrow hands-on operations signal with limited depth."
+    }
+  ]
+}

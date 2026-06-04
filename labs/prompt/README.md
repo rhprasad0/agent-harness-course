@@ -15,6 +15,7 @@ Ryan is starting from the top of the curriculum here.
 | Date | Lab | Status | Evidence | Notes |
 |---|---|---:|---|---|
 | 2026-06-03 | First/top Prompt Engineering module | Starting | Scaffold only | No completed lab evidence yet. |
+| 2026-06-04 | Recruiter-facing few-shot order sensitivity | Passed | [`2026-06-04-recruiter-screen-order-sensitivity.md`](./2026-06-04-recruiter-screen-order-sensitivity.md) | Fake candidate fixture + runner implemented; Ollama `gpt-oss:20b` showed borderline-only flips; Codex bridge `gpt-5.5` and Ollama Meta `llama3` showed no flips in first single-run comparisons. |
 
 ## Next lab note
 

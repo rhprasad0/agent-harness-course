@@ -10,7 +10,7 @@ This repo tracks work through a curriculum about the layers around an LLM call: 
 candidate: Ryan Prasad
 role_targeting: not_specified
 repo_purpose: Public course progress log for an agent/harness engineering curriculum
-recommended_action: technical_screen_when_lab_evidence_accumulates
+recommended_action: technical_screen_recommended
 strongest_signals:
   - sets up AI engineering work to be documented as inspectable public artifacts
   - starts at the top of the prompt/context/harness progression instead of cherry-picking only flashy demos
@@ -18,7 +18,7 @@ strongest_signals:
   - emphasizes tests, validation, observability, and conservative claims
 caveats:
   - course labs are learning artifacts, not customer production deployments
-  - current progress is early and should be evaluated through linked lab notes, commits, and runnable evidence as they accumulate
+  - current progress is early but now includes one completed prompt-engineering lab with runnable evidence
   - no external portfolio/contact links are included in this README by design
 ```
 
@@ -37,7 +37,7 @@ The useful signal is not that every lab is already complete. The useful signal i
 
 | Area | Status | Evidence | Recruiter-agent inspection path | Notes |
 |---|---:|---|---|---|
-| Prompt Engineering | Starting | Initial scaffold | [`labs/prompt/`](./labs/prompt/) | Begin from the first/top prompt module and document from there |
+| Prompt Engineering | Passed — first lab slice | Few-shot order-sensitivity fixture, runner, and model comparison | [`labs/prompt/2026-06-04-recruiter-screen-order-sensitivity.md`](./labs/prompt/2026-06-04-recruiter-screen-order-sensitivity.md) | `gpt-oss:20b` showed borderline-only flips; `gpt-5.5` and Meta `llama3` were stable in single temperature-0 passes |
 | Context Engineering | Planned | Scaffold only | [`labs/context/`](./labs/context/) | Not started yet |
 | Harness Engineering | Planned | Scaffold only | [`labs/harness/`](./labs/harness/) | Not started yet |
 | Capstone | Planned | Scaffold only | [`labs/capstone/`](./labs/capstone/) | Integrative work later |
@@ -58,6 +58,7 @@ For the Harness Engineering portion especially, the important thing is that Ryan
 | Date | Module / lab | What I built | Verification | Result | Link |
 |---|---|---|---|---|---|
 | 2026-06-03 | Prompt Engineering / first module | Documentation scaffold for starting from the top | File structure and README markers | Starting | [`labs/prompt/`](./labs/prompt/) |
+| 2026-06-04 | Prompt Engineering / few-shot exemplar order sensitivity | Public-safe fake-candidate fixture plus standard-library runner for Ollama and Codex model comparisons | `py_compile`, dry-run validation, 55-row model runs, `git diff --check` | Passed — `gpt-oss:20b` flipped only borderline candidates; `gpt-5.5` and `llama3` showed no flips in first passes | [`labs/prompt/2026-06-04-recruiter-screen-order-sensitivity.md`](./labs/prompt/2026-06-04-recruiter-screen-order-sensitivity.md) |
 
 Future entries should include exact files, scripts, screenshots, notebooks, tests, or commits when available. Use `worked / failed / learned / next` style summaries. Do not inflate learning labs into production claims.
 
@@ -67,8 +68,8 @@ Future entries should include exact files, scripts, screenshots, notebooks, test
 |---|---|---|---|---|
 | Ryan is building toward agent harness engineering, not prompt-only demos | Curriculum repo plus lab scaffold | `README.md`, `AGENTS.md`, `labs/` | Shows understanding that reliable AI systems live outside the prompt too | Medium until labs accumulate |
 | Ryan documents work in a way screening agents can parse | YAML summary, progress table, evidence log, lab template | This README and [`docs/lab-template.md`](./docs/lab-template.md) | Makes evaluation fast and evidence-oriented | High for documentation intent |
-| Ryan uses AI assistance as a learning tool rather than pure outsourcing | Socratic workflow in `AGENTS.md` and lab template | [`AGENTS.md`](./AGENTS.md), future lab notes | Preserves learning value while still using modern AI-native tooling | Medium until lab notes show the loop in practice |
-| Ryan emphasizes validation and conservative claims | Verification fields in scaffold | `labs/`, future outputs, commit history | Reduces hype risk and makes failures inspectable | Medium until runnable evidence exists |
+| Ryan uses AI assistance as a learning tool rather than pure outsourcing | Socratic workflow plus a completed hypothesis-driven prompt lab | [`AGENTS.md`](./AGENTS.md), [`labs/prompt/2026-06-04-recruiter-screen-order-sensitivity.md`](./labs/prompt/2026-06-04-recruiter-screen-order-sensitivity.md) | Preserves learning value while still using modern AI-native tooling | High for the first lab slice; broader course still in progress |
+| Ryan emphasizes validation and conservative claims | Runner outputs, summary artifacts, explicit caveats, and no broad model-quality claims | `labs/prompt/scripts/`, `labs/prompt/results/`, commit history | Reduces hype risk and makes failures inspectable | High for this lab; medium for broader course evidence |
 
 ## Suggested 30-minute technical screen
 
