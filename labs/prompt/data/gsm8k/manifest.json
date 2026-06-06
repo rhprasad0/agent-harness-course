@@ -1,0 +1,56 @@
+{
+  "dataset": "GSM8K / Grade School Math 8K",
+  "source_repo": "https://github.com/openai/grade-school-math",
+  "source_base": "https://raw.githubusercontent.com/openai/grade-school-math/master/grade_school_math/data",
+  "license": "MIT per upstream repository / Hugging Face dataset card",
+  "files": {
+    "train.jsonl": {
+      "url": "https://raw.githubusercontent.com/openai/grade-school-math/master/grade_school_math/data/train.jsonl",
+      "bytes": 4166206,
+      "rows": 7473,
+      "sha256": "17f347dc51477c50d4efb83959dbb7c56297aba886e5544ee2aaed3024813465",
+      "schema": [
+        "question",
+        "answer"
+      ],
+      "bad_rows_missing_expected_schema_or_final_marker": [],
+      "bad_row_count": 0
+    },
+    "test.jsonl": {
+      "url": "https://raw.githubusercontent.com/openai/grade-school-math/master/grade_school_math/data/test.jsonl",
+      "bytes": 749738,
+      "rows": 1319,
+      "sha256": "3730d312f6e3440559ace48831e51066acaca737f6eabec99bccb9e4b3c39d14",
+      "schema": [
+        "question",
+        "answer"
+      ],
+      "bad_rows_missing_expected_schema_or_final_marker": [],
+      "bad_row_count": 0
+    },
+    "train_socratic.jsonl": {
+      "url": "https://raw.githubusercontent.com/openai/grade-school-math/master/grade_school_math/data/train_socratic.jsonl",
+      "bytes": 5401739,
+      "rows": 7473,
+      "sha256": "153d86551187cfd64ef7afb59bfd0ef75cea3ae9388e7ad31e43920b6dd77872",
+      "schema": [
+        "question",
+        "answer"
+      ],
+      "bad_rows_missing_expected_schema_or_final_marker": [],
+      "bad_row_count": 0
+    },
+    "test_socratic.jsonl": {
+      "url": "https://raw.githubusercontent.com/openai/grade-school-math/master/grade_school_math/data/test_socratic.jsonl",
+      "bytes": 972978,
+      "rows": 1319,
+      "sha256": "c96673362fa7a699f4836a9b6474a067448f95fe58064727501ee63ba4c3fdb6",
+      "schema": [
+        "question",
+        "answer"
+      ],
+      "bad_rows_missing_expected_schema_or_final_marker": [],
+      "bad_row_count": 0
+    }
+  }
+}
