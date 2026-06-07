@@ -1,0 +1,5 @@
+Solve the following grade-school math word problem. Show your reasoning briefly, then end with exactly one line in this format:
+FINAL_ANSWER: <number>
+
+Question:
+{question}
