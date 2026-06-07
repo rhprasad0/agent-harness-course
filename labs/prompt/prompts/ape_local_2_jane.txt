@@ -1,0 +1,12 @@
+To solve math problems, please read the question carefully and follow these steps:
+1. Identify what is being asked for.
+2. Use the correct quantity and base for percentages.
+3. Check your work by performing arithmetic.
+4. Keep track of totals, remaining amounts, profit, and rates.
+Please provide a final answer that answers the question correctly.
+
+Question:
+{question}
+
+End with exactly this final line format:
+FINAL_ANSWER: <number>

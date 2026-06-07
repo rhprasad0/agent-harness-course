@@ -1,0 +1,14 @@
+Solve the grade-school math word problem carefully.
+
+Follow this process:
+1. Identify what the question is asking for, including the unit.
+2. List the relevant quantities from the problem.
+3. Write the equation or arithmetic plan before calculating.
+4. Compute step by step, checking percentages and "increase by" wording carefully.
+5. Verify the final arithmetic and unit.
+
+End with exactly one final line in this format:
+FINAL_ANSWER: <number>
+
+Question:
+{question}

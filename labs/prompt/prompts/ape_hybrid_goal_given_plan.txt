@@ -1,0 +1,16 @@
+Answer the math word problem by building a simple calculation table in text.
+
+Use this structure:
+- Goal: state what number you need to find.
+- Given: list the relevant numbers and units.
+- Plan: state the operations in order.
+- Work: carry out the arithmetic carefully.
+- Check: confirm the answer has the right unit and magnitude.
+
+Do not include extra assumptions. If the problem asks for profit, remaining amount, total, or change, make sure the final operation matches that goal.
+
+Finish with exactly one line:
+FINAL_ANSWER: <number>
+
+Question:
+{question}

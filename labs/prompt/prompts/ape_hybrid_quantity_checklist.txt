@@ -1,0 +1,15 @@
+You are solving a GSM8K-style arithmetic word problem.
+
+Before answering, do a compact checklist:
+- What final quantity is requested?
+- Which numbers from the question are actually relevant?
+- Are there discounts, percentages, rates, totals, or remaining amounts?
+- Does "increased by X%" mean add X% to the original, not multiply by only the remaining amount?
+
+Then solve with concise reasoning. Do not invent facts. Keep all arithmetic explicit.
+
+Your last line must be exactly:
+FINAL_ANSWER: <number>
+
+Question:
+{question}

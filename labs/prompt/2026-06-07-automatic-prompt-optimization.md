@@ -153,6 +153,76 @@ Smoke-test summary:
 - All 3 responses used the requested `FINAL_ANSWER` marker.
 - The wrong case was a reasoning/answer failure, not a parse failure.
 
+Dev/search baseline run:
+
+```sh
+python3 labs/prompt/scripts/evaluate_gsm8k_prompt_ollama.py --limit 30 --offset 0 --num-predict 256 --temperature 0.0 --prompt-id baseline_reasoning_dev30
+```
+
+Relevant output:
+
+```text
+- Result: 8/30 correct (26.7%)
+- Average elapsed: 1.47s/question
+- Average prompt tokens reported by Ollama: 116.4
+- Average completion tokens reported by Ollama: 181.6
+- Parse statuses: 29 `final_answer_marker`, 1 `last_number_fallback`
+```
+
+Artifacts:
+
+- [`results/2026-06-07T143510Z-gsm8k-test-offset0-limit30-ollama-mistral-7b-instruct-q4_K_M-prompt-baseline_reasoning_dev30-summary.md`](./results/2026-06-07T143510Z-gsm8k-test-offset0-limit30-ollama-mistral-7b-instruct-q4_K_M-prompt-baseline_reasoning_dev30-summary.md)
+- [`results/2026-06-07T143510Z-gsm8k-test-offset0-limit30-ollama-mistral-7b-instruct-q4_K_M-prompt-baseline_reasoning_dev30.jsonl`](./results/2026-06-07T143510Z-gsm8k-test-offset0-limit30-ollama-mistral-7b-instruct-q4_K_M-prompt-baseline_reasoning_dev30.jsonl)
+
+This 8/30 dev score is the first fixed-harness scoreboard entry that future prompt candidates must beat under the same rows/settings.
+
+APE mixed-example briefing:
+
+Ryan chose **mixed correct + wrong examples** for the first APE-style candidate generation step. This preserves visible examples of what the baseline already does well while showing failures the optimizer should target.
+
+Created briefing artifact:
+
+- [`results/2026-06-07-ape-mixed-example-briefing.md`](./results/2026-06-07-ape-mixed-example-briefing.md)
+
+Briefing contents:
+
+- fixed evaluator conditions,
+- baseline dev score: 8/30,
+- 4 correct baseline examples,
+- 8 wrong baseline examples,
+- instruction that future candidate prompts must preserve `FINAL_ANSWER: <number>` and be evaluated through the same harness before any improvement claim.
+
+First APE candidate pass:
+
+Ryan chose to generate/evaluate both local-only and hybrid candidates in the same pass. Candidate prompt files:
+
+- [`prompts/ape_local_1_john.txt`](./prompts/ape_local_1_john.txt)
+- [`prompts/ape_local_2_jane.txt`](./prompts/ape_local_2_jane.txt)
+- [`prompts/ape_local_3_david.txt`](./prompts/ape_local_3_david.txt)
+- [`prompts/ape_hybrid_units_equation_check.txt`](./prompts/ape_hybrid_units_equation_check.txt)
+- [`prompts/ape_hybrid_quantity_checklist.txt`](./prompts/ape_hybrid_quantity_checklist.txt)
+- [`prompts/ape_hybrid_goal_given_plan.txt`](./prompts/ape_hybrid_goal_given_plan.txt)
+
+The local optimizer's raw generation is preserved at [`results/2026-06-07-local-ape-candidate-generation-raw.md`](./results/2026-06-07-local-ape-candidate-generation-raw.md). It produced generic prompts and formatting issues, which is useful evidence that local-only prompt generation may be weak in this setup.
+
+Scoreboard artifact:
+
+- [`results/2026-06-07-ape-local-vs-hybrid-dev30-scoreboard.md`](./results/2026-06-07-ape-local-vs-hybrid-dev30-scoreboard.md)
+
+Dev-30 results:
+
+| Prompt ID | Source | Correct | Accuracy | Notes |
+|---|---|---:|---:|---|
+| `baseline_reasoning_dev30` | hand baseline | 8/30 | 26.7% | best format compliance: 29/30 final marker |
+| `ape_local_1_john` | local APE | 8/30 | 26.7% | tied baseline, more fallback parsing |
+| `ape_local_2_jane` | local APE | 7/30 | 23.3% | under baseline |
+| `ape_local_3_david` | local APE | 8/30 | 26.7% | tied baseline |
+| `ape_hybrid_units_equation_check` | hybrid APE | 7/30 | 23.3% | under baseline, many fallback parses |
+| `ape_hybrid_quantity_checklist` | hybrid APE | 8/30 | 26.7% | tied baseline, many fallback parses |
+| `ape_hybrid_goal_given_plan` | hybrid APE | 8/30 | 26.7% | tied baseline, more fallback parsing than baseline |
+
+Interpretation: first-pass APE did **not** improve over the hand baseline on the fixed dev slice. More structured prompts often reduced final-marker compliance or increased fallback parsing. This does not falsify all prompt optimization; it says the first APE candidate set did not support the hypothesis.
+
 If GEPA/DSPy is added later:
 
 ```sh

@@ -1,0 +1,7 @@
+Given a math problem, please provide a solution that answers the question correctly and includes all necessary information. For example: "If Sarah sells 5 books for $2 each, how much money does she make?"
+
+Question:
+{question}
+
+End with exactly this final line format:
+FINAL_ANSWER: <number>

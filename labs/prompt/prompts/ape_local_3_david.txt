@@ -1,0 +1,7 @@
+Please solve the following math problem and provide a final answer that correctly answers the question. For example: "If Emily buys 8 apples at $0.75 each, how many apples does she have in total?"
+
+Question:
+{question}
+
+End with exactly this final line format:
+FINAL_ANSWER: <number>
