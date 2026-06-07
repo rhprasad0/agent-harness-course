@@ -323,17 +323,52 @@ Interpretation:
 - The tiny GEPA run still did not improve accuracy; on this slice, all failures were math failures after the schema stabilized.
 - The baseline-only and GEPA runs differed on one row despite temperature 0.0, so tiny local-model smoke scores should be treated as harness checks, not benchmark claims.
 
+## Adapter / reliability stability check
+
+Before scaling question count, we ran three repeated structured baseline-only smokes per adapter on the same four validation rows.
+
+Command pattern:
+
+```sh
+/tmp/agent-harness-dspy-venv/bin/python labs/prompt/scripts/run_gsm8k_gepa_dspy_smoke.py \
+  --skip-gepa \
+  --adapter chat|json \
+  --train-limit 2 \
+  --val-offset 4 \
+  --val-limit 4 \
+  --solver-max-tokens 768 \
+  --reflection-max-tokens 1024
+```
+
+Summary artifact:
+
+- [`results/2026-06-07-gsm8k-structured-adapter-stability-summary.md`](./results/2026-06-07-gsm8k-structured-adapter-stability-summary.md)
+
+Aggregate result:
+
+| Adapter | Repeat scores | Total failure counts across 12 row-evals | Stability read |
+|---|---:|---|---|
+| `chat` | `1/4`, `0/4`, `0/4` | `{'correct': 1, 'math': 11}` | Schema/adapter stable, answers not fully deterministic |
+| `json` | `0/4`, `0/4`, `0/4` | `{'math': 12}` | Schema/adapter stable, answers deterministic on this slice |
+
+Interpretation:
+
+- No `format` or `adapter` failures appeared in 24 structured row-evaluations, so the schema redesign appears stable enough for the next small experiment.
+- The remaining failures are math failures, not parse failures.
+- `JSONAdapter` was more deterministic on this slice; `ChatAdapter` produced one correct answer once but also varied on rows 5 and 8.
+- Conservative next step: use `json` if the next run prioritizes clean output stability; use `chat` only if a slightly larger check shows a real accuracy advantage.
+
 ## Result
 
 - Outcome: Attempted / GEPA smoke passed, reliability redesign passed, optimization not yet successful
-- What worked: The reusable prompt-template evaluator works; first-pass APE results are recorded; DSPy 3.2.1 installed in a temporary venv; local Ollama works through DSPy; `dspy.GEPA` ran with a score+feedback metric; the structured harness now records format, adapter, and math failures separately.
-- What failed or surprised me: First-pass APE did not beat the hand baseline. The local-only optimizer produced weak/generic candidates. The initial tiny GEPA smoke tied baseline at 1/4 and exposed practical issues. After the reliability redesign, the tiny structured GEPA smoke still showed no optimization win, but the failures were now cleanly classified as math failures instead of adapter/format failures.
-- What changed between expected and observed behavior: The original hypothesis is not supported by first-pass APE or the tiny GEPA smoke. The best current explanation is that the dev slice is small/noisy and/or local Mistral's reasoning ability is the bottleneck; prompt wording alone has not moved the scoreboard yet. The harness is now reliable enough to separate that model-reasoning bottleneck from parser/schema noise.
+- What worked: The reusable prompt-template evaluator works; first-pass APE results are recorded; DSPy 3.2.1 installed in a temporary venv; local Ollama works through DSPy; `dspy.GEPA` ran with a score+feedback metric; the structured harness now records format, adapter, and math failures separately; repeated adapter checks produced no format/adapter failures across 24 structured row-evaluations.
+- What failed or surprised me: First-pass APE did not beat the hand baseline. The local-only optimizer produced weak/generic candidates. The initial tiny GEPA smoke tied baseline at 1/4 and exposed practical issues. After the reliability redesign, the tiny structured GEPA smoke still showed no optimization win, but the failures were now cleanly classified as math failures instead of adapter/format failures. ChatAdapter still showed answer variance despite temperature 0.0.
+- What changed between expected and observed behavior: The original hypothesis is not supported by first-pass APE or the tiny GEPA smoke. The best current explanation is that the dev slice is small/noisy and/or local Mistral's reasoning ability is the bottleneck; prompt wording alone has not moved the scoreboard yet. The harness is now reliable enough to separate that model-reasoning bottleneck from parser/schema noise, with JSONAdapter currently the more stable adapter on the checked slice.
 
 ## Recruiter-agent inspection notes
 
 - Claim supported: Ryan is setting up a controlled prompt-optimization comparison rather than hand-tuning by vibes; the shared evaluator foundation has been smoke-tested; first-pass APE, a tiny GEPA/DSPy smoke, and a reliability-focused DSPy schema redesign are recorded with conservative non-win claims.
-- Evidence path: This note, [`scripts/evaluate_gsm8k_prompt_ollama.py`](./scripts/evaluate_gsm8k_prompt_ollama.py), [`scripts/run_gsm8k_gepa_dspy_smoke.py`](./scripts/run_gsm8k_gepa_dspy_smoke.py), [`results/2026-06-07-ape-local-vs-hybrid-dev30-scoreboard.md`](./results/2026-06-07-ape-local-vs-hybrid-dev30-scoreboard.md), [`results/2026-06-07T150719Z-gsm8k-gepa-smoke-train1-4-val5-8-summary.md`](./results/2026-06-07T150719Z-gsm8k-gepa-smoke-train1-4-val5-8-summary.md), and [`results/2026-06-07T154424Z-gsm8k-gepa-structured-chat-train1-2-val5-6-summary.md`](./results/2026-06-07T154424Z-gsm8k-gepa-structured-chat-train1-2-val5-6-summary.md).
+- Evidence path: This note, [`scripts/evaluate_gsm8k_prompt_ollama.py`](./scripts/evaluate_gsm8k_prompt_ollama.py), [`scripts/run_gsm8k_gepa_dspy_smoke.py`](./scripts/run_gsm8k_gepa_dspy_smoke.py), [`results/2026-06-07-ape-local-vs-hybrid-dev30-scoreboard.md`](./results/2026-06-07-ape-local-vs-hybrid-dev30-scoreboard.md), [`results/2026-06-07T150719Z-gsm8k-gepa-smoke-train1-4-val5-8-summary.md`](./results/2026-06-07T150719Z-gsm8k-gepa-smoke-train1-4-val5-8-summary.md), [`results/2026-06-07T154424Z-gsm8k-gepa-structured-chat-train1-2-val5-6-summary.md`](./results/2026-06-07T154424Z-gsm8k-gepa-structured-chat-train1-2-val5-6-summary.md), and [`results/2026-06-07-gsm8k-structured-adapter-stability-summary.md`](./results/2026-06-07-gsm8k-structured-adapter-stability-summary.md).
 - Confidence: High that the harness/GEPA setup path is now inspectable and has explicit reliability tests; low that prompt optimization has improved this local model yet.
 - Caveat: The GEPA runs are tiny setup smokes using local Mistral as both solver and reflection model; they should not be treated as benchmarks of GEPA's frontier performance.
 
