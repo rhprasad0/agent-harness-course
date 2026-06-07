@@ -1,0 +1,57 @@
+{
+  "date": "2026-06-07T154357Z",
+  "dspy_version": "3.2.1",
+  "model": "mistral:7b-instruct-q4_K_M",
+  "base_url": "http://127.0.0.1:11434",
+  "adapter": "chat",
+  "data": "labs/prompt/data/gsm8k/test.jsonl",
+  "train_rows": [
+    1,
+    2
+  ],
+  "val_rows": [
+    5,
+    6
+  ],
+  "solver_max_tokens": 768,
+  "reflection_max_tokens": 1024,
+  "max_metric_calls": 24,
+  "baseline_score": 0.5,
+  "compiled_score": null,
+  "compiled_error": null,
+  "baseline_failure_counts": {
+    "correct": 1,
+    "math": 1
+  },
+  "compiled_failure_counts": {},
+  "baseline_rows": [
+    {
+      "row_number": 5,
+      "question": "Every day, Wendi feeds each of her chickens three cups of mixed chicken feed, containing seeds, mealworms and vegetables to help keep them healthy.  She gives the chickens their feed in three separate meals. In the morning, she gives her flock of chickens 15 cups of feed.  In the afternoon, she gives her chickens another 25 cups of feed.  How many cups of feed does she need to give her chickens in the final meal of the day if the size of Wendi's flock is 20 chickens?",
+      "gold_answer": 20,
+      "pred_answer_raw": 20,
+      "pred_answer_norm": 20,
+      "reasoning": "Wendi gives her chickens 15 cups of feed in the morning, 25 cups in the afternoon, and needs to give them a total of 60 cups of feed (3 cups per chicken x 20 chickens). Since she has already given them 40 cups of feed (15 + 25), she needs to give them an additional 20 cups of feed in the final meal.",
+      "score": 1.0,
+      "failure_type": "correct",
+      "feedback": "Correct. Integer answer 20 matches gold answer 20.",
+      "error": null
+    },
+    {
+      "row_number": 6,
+      "question": "Kylar went to the store to buy glasses for his new apartment. One glass costs $5, but every second glass costs only 60% of the price. Kylar wants to buy 16 glasses. How much does he need to pay for them?",
+      "gold_answer": 64,
+      "pred_answer_raw": 95,
+      "pred_answer_norm": 95,
+      "reasoning": "Kylar needs to buy 16 glasses. The first glass costs $5, so the next 15 glasses will cost 60% of $5 each. To find out how much he needs to pay for all 16 glasses, we can add up the cost of the first glass and the next 15 glasses.",
+      "score": 0.0,
+      "failure_type": "math",
+      "feedback": "Math failure: integer answer 95 does not match gold answer 64. Review the quantities, operations, and arithmetic before changing the final answer. Worked solution:\nThe discount price of one glass is 60/100 * 5 = $<<60/100*5=3>>3.\nIf every second glass is cheaper, that means Kylar is going to buy 16 / 2 = <<16/2=8>>8 cheaper glasses.\nSo for the cheaper glasses, Kylar is going to pay 8 * 3 = $<<8*3=24>>24.\nAnd for the regular-priced glasses, Kylar will pay 8 * 5 = $<<8*5=40>>40.\nSo in total Kylar needs to pay 24 + 40 = $<<24+40=64>>64 for the glasses he wants to buy.\n#### 64",
+      "error": null
+    }
+  ],
+  "compiled_rows": [],
+  "baseline_program_repr": "solve = Predict(GSM8KStructuredSignature(question -> reasoning, answer\n    instructions='Solve a grade-school math word problem. Compute carefully and return a clean structured answer.'\n    question = Field(annotation=str required=True json_schema_extra={'desc': 'GSM8K math word problem', '__dspy_field_type': 'input', 'prefix': 'Question:'})\n    reasoning = Field(annotation=str required=True json_schema_extra={'desc': 'brief arithmetic reasoning; include only steps needed to justify the final answer', '__dspy_field_type': 'output', 'prefix': 'Reasoning:'})\n    answer = Field(annotation=int required=True json_schema_extra={'desc': 'final integer answer only; no units, commas, words, or equations', '__dspy_field_type': 'output', 'prefix': 'Answer:'})\n))",
+  "compiled_program_repr": null,
+  "has_detailed_results": false
+}
