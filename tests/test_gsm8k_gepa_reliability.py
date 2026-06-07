@@ -26,6 +26,8 @@ def test_structured_signature_declares_explicit_reasoning_and_integer_answer():
     assert list(output_fields) == ["reasoning", "answer"]
     assert output_fields["reasoning"].annotation is str
     assert output_fields["answer"].annotation is int
+    assert "direct arithmetic" in (module.GSM8KStructuredSignature.__doc__ or "")
+    assert "always emit both JSON fields" in (module.GSM8KStructuredSignature.__doc__ or "")
 
 
 def test_metric_separates_format_failure_from_math_failure_and_success():

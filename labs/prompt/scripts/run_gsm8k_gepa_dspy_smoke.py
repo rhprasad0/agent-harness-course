@@ -96,11 +96,20 @@ def load_examples(path: Path, *, offset: int, limit: int) -> list[dspy.Example]:
 
 
 class GSM8KStructuredSignature(dspy.Signature):
-    """Solve a grade-school math word problem. Compute carefully and return a clean structured answer."""
+    """Solve a grade-school math word problem using direct arithmetic.
+
+    Work forward from known quantities to derived quantities. For relationship problems,
+    compute each named quantity from the known base value before summing. Do not set up
+    simultaneous equations. Keep reasoning under four short steps, avoid repeating any line,
+    and always emit both JSON fields: `reasoning` and integer `answer`.
+    """
 
     question: str = dspy.InputField(desc="GSM8K math word problem")
     reasoning: str = dspy.OutputField(
-        desc="brief arithmetic reasoning; include only steps needed to justify the final answer"
+        desc=(
+            "brief direct arithmetic reasoning in fewer than four short steps; "
+            "work forward from known values; no simultaneous equations; no repeated lines"
+        )
     )
     answer: int = dspy.OutputField(desc="final integer answer only; no units, commas, words, or equations")
 
