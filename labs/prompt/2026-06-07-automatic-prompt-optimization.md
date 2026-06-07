@@ -358,20 +358,93 @@ Interpretation:
 - `JSONAdapter` was more deterministic on this slice; `ChatAdapter` produced one correct answer once but also varied on rows 5 and 8.
 - Conservative next step: use `json` if the next run prioritizes clean output stability; use `chat` only if a slightly larger check shows a real accuracy advantage.
 
+## JSON + GPT-5.4 Codex-bridge reflection smoke
+
+Next, we kept the solver fixed as local Mistral and used the Codex bridge only for GEPA reflection.
+
+Bridge discovery:
+
+```sh
+curl -sS http://kube1.lan:4001/v1/models
+```
+
+Observed model IDs included:
+
+```text
+gpt-5.5
+gpt-5.4
+gpt-5.4-mini
+gpt-5.3-codex
+gpt-5.2-codex
+```
+
+A direct chat-completions smoke to `gpt-5.4` returned `bridge-ok`. DSPy/LiteLLM required a non-empty dummy `api_key` even though the bridge endpoint itself did not need real OpenAI auth, so the harness uses a placeholder such as `sk-noauth` and records only `reflection_api_key_set: true`, not the value.
+
+Harness changes:
+
+- Added separate solver and reflection LM configuration.
+- Solver remains local Ollama Mistral.
+- Reflection can now use `--reflection-provider openai-compatible`, `--reflection-model gpt-5.4`, and `--reflection-base-url http://kube1.lan:4001/v1`.
+- Added tests proving the LM factory builds `ollama_chat/...` for the solver and `openai/gpt-5.4` for the bridge reflector.
+
+First 4-row JSON/Codex-reflection attempt:
+
+- Artifact: [`results/2026-06-07T160316Z-gsm8k-gepa-structured-json-train1-2-val5-8-summary.md`](./results/2026-06-07T160316Z-gsm8k-gepa-structured-json-train1-2-val5-8-summary.md)
+- Result: baseline `0/4`, compiled `0/4`, failure counts `{'math': 3, 'adapter': 1}`.
+- Interpretation: row 7 still triggered local Mistral repetition/truncation under JSONAdapter. This is a solver/schema stress failure, not a reflection-model failure.
+
+Targeted reflection smoke with failing train rows:
+
+```sh
+/tmp/agent-harness-dspy-venv/bin/python labs/prompt/scripts/run_gsm8k_gepa_dspy_smoke.py \
+  --adapter json \
+  --train-offset 4 \
+  --train-limit 2 \
+  --val-offset 4 \
+  --val-limit 2 \
+  --solver-max-tokens 768 \
+  --reflection-provider openai-compatible \
+  --reflection-model gpt-5.4 \
+  --reflection-base-url http://kube1.lan:4001/v1 \
+  --reflection-api-key sk-noauth \
+  --reflection-temperature 0.7 \
+  --reflection-max-tokens 1536 \
+  --max-metric-calls 8
+```
+
+Artifact:
+
+- [`results/2026-06-07T160415Z-gsm8k-gepa-structured-json-train5-6-val5-6-summary.md`](./results/2026-06-07T160415Z-gsm8k-gepa-structured-json-train5-6-val5-6-summary.md)
+
+Result:
+
+| Run | Score | Failure counts |
+|---|---:|---|
+| Structured JSON baseline | `0/2` | `{'math': 2}` |
+| GEPA compiled with GPT-5.4 reflection | `2/2` | `{'correct': 2}` |
+
+GEPA proposed a concrete improved instruction that emphasized reading the required quantity, matching operations to wording, handling per-item/per-rate patterns, subtracting already-used amounts, and treating every-second-item discounts carefully.
+
+Interpretation:
+
+- This is the first positive GEPA signal in the lab.
+- It is intentionally tiny and uses the same rows for train and validation, so it is not a benchmark or held-out win.
+- It does support the bottleneck hypothesis: stronger reflection plus cleaner JSON failure feedback can produce a useful prompt mutation where local-only reflection did not.
+
 ## Result
 
-- Outcome: Attempted / GEPA smoke passed, reliability redesign passed, optimization not yet successful
-- What worked: The reusable prompt-template evaluator works; first-pass APE results are recorded; DSPy 3.2.1 installed in a temporary venv; local Ollama works through DSPy; `dspy.GEPA` ran with a score+feedback metric; the structured harness now records format, adapter, and math failures separately; repeated adapter checks produced no format/adapter failures across 24 structured row-evaluations.
-- What failed or surprised me: First-pass APE did not beat the hand baseline. The local-only optimizer produced weak/generic candidates. The initial tiny GEPA smoke tied baseline at 1/4 and exposed practical issues. After the reliability redesign, the tiny structured GEPA smoke still showed no optimization win, but the failures were now cleanly classified as math failures instead of adapter/format failures. ChatAdapter still showed answer variance despite temperature 0.0.
-- What changed between expected and observed behavior: The original hypothesis is not supported by first-pass APE or the tiny GEPA smoke. The best current explanation is that the dev slice is small/noisy and/or local Mistral's reasoning ability is the bottleneck; prompt wording alone has not moved the scoreboard yet. The harness is now reliable enough to separate that model-reasoning bottleneck from parser/schema noise, with JSONAdapter currently the more stable adapter on the checked slice.
+- Outcome: Attempted / first positive GEPA smoke, not yet a held-out benchmark win
+- What worked: The reusable prompt-template evaluator works; first-pass APE results are recorded; DSPy 3.2.1 installed in a temporary venv; local Ollama works through DSPy; `dspy.GEPA` ran with a score+feedback metric; the structured harness now records format, adapter, and math failures separately; repeated adapter checks produced no format/adapter failures across 24 structured row-evaluations; GPT-5.4 via the Codex bridge produced a useful GEPA mutation on a targeted 2-row smoke.
+- What failed or surprised me: First-pass APE did not beat the hand baseline. The local-only optimizer produced weak/generic candidates. The initial tiny GEPA smoke tied baseline at 1/4 and exposed practical issues. After the reliability redesign, the tiny structured GEPA smoke still showed no optimization win, but the failures were cleanly classified. ChatAdapter still showed answer variance despite temperature 0.0. JSONAdapter can still trigger adapter failures when local Mistral loops/truncates on a hard row.
+- What changed between expected and observed behavior: The original broad hypothesis is not supported by first-pass APE or local-only GEPA. The targeted GPT-5.4-reflection smoke supports the narrower bottleneck hypothesis: once output reliability is stable, stronger reflection can produce a useful instruction mutation. This is not yet held-out evidence because train and validation rows were intentionally identical for the smoke.
 
 ## Recruiter-agent inspection notes
 
-- Claim supported: Ryan is setting up a controlled prompt-optimization comparison rather than hand-tuning by vibes; the shared evaluator foundation has been smoke-tested; first-pass APE, a tiny GEPA/DSPy smoke, and a reliability-focused DSPy schema redesign are recorded with conservative non-win claims.
-- Evidence path: This note, [`scripts/evaluate_gsm8k_prompt_ollama.py`](./scripts/evaluate_gsm8k_prompt_ollama.py), [`scripts/run_gsm8k_gepa_dspy_smoke.py`](./scripts/run_gsm8k_gepa_dspy_smoke.py), [`results/2026-06-07-ape-local-vs-hybrid-dev30-scoreboard.md`](./results/2026-06-07-ape-local-vs-hybrid-dev30-scoreboard.md), [`results/2026-06-07T150719Z-gsm8k-gepa-smoke-train1-4-val5-8-summary.md`](./results/2026-06-07T150719Z-gsm8k-gepa-smoke-train1-4-val5-8-summary.md), [`results/2026-06-07T154424Z-gsm8k-gepa-structured-chat-train1-2-val5-6-summary.md`](./results/2026-06-07T154424Z-gsm8k-gepa-structured-chat-train1-2-val5-6-summary.md), and [`results/2026-06-07-gsm8k-structured-adapter-stability-summary.md`](./results/2026-06-07-gsm8k-structured-adapter-stability-summary.md).
-- Confidence: High that the harness/GEPA setup path is now inspectable and has explicit reliability tests; low that prompt optimization has improved this local model yet.
-- Caveat: The GEPA runs are tiny setup smokes using local Mistral as both solver and reflection model; they should not be treated as benchmarks of GEPA's frontier performance.
+- Claim supported: Ryan is setting up a controlled prompt-optimization comparison rather than hand-tuning by vibes; the shared evaluator foundation has been smoke-tested; first-pass APE, local GEPA, adapter stability, and a GPT-5.4-reflection GEPA smoke are recorded with conservative claims.
+- Evidence path: This note, [`scripts/evaluate_gsm8k_prompt_ollama.py`](./scripts/evaluate_gsm8k_prompt_ollama.py), [`scripts/run_gsm8k_gepa_dspy_smoke.py`](./scripts/run_gsm8k_gepa_dspy_smoke.py), [`results/2026-06-07-ape-local-vs-hybrid-dev30-scoreboard.md`](./results/2026-06-07-ape-local-vs-hybrid-dev30-scoreboard.md), [`results/2026-06-07T150719Z-gsm8k-gepa-smoke-train1-4-val5-8-summary.md`](./results/2026-06-07T150719Z-gsm8k-gepa-smoke-train1-4-val5-8-summary.md), [`results/2026-06-07T154424Z-gsm8k-gepa-structured-chat-train1-2-val5-6-summary.md`](./results/2026-06-07T154424Z-gsm8k-gepa-structured-chat-train1-2-val5-6-summary.md), [`results/2026-06-07-gsm8k-structured-adapter-stability-summary.md`](./results/2026-06-07-gsm8k-structured-adapter-stability-summary.md), and [`results/2026-06-07T160415Z-gsm8k-gepa-structured-json-train5-6-val5-6-summary.md`](./results/2026-06-07T160415Z-gsm8k-gepa-structured-json-train5-6-val5-6-summary.md).
+- Confidence: High that the harness/GEPA setup path is now inspectable and has explicit reliability tests; medium that stronger reflection is the right next bottleneck; low that prompt optimization has improved held-out performance yet.
+- Caveat: The positive GPT-5.4-reflection smoke is a tiny same-row train/validation check; it should be treated as a mechanism demo, not a benchmark win.
 
 ## Next step
 
-Run a slightly larger structured ChatAdapter smoke before any benchmark claim: train/val 4/4 or 8/8, solver tokens 768, reflection tokens 1024, and inspect failure counts. If failures remain mostly `math`, try a stronger reflection model next; if `format` or `adapter` returns, fix schema/adapter reliability before scaling. Do not compare GEPA to APE on held-out rows until the structured failure modes stay stable.
+Run a held-out JSONAdapter + GPT-5.4-reflection smoke: train on the two rescued rows `[5, 6]`, validate on a nearby non-overlapping slice that excludes the known row-7 truncation trap at first, then reintroduce harder rows after adding an anti-repetition/concise-reasoning guard. Treat any held-out improvement as provisional until repeated.

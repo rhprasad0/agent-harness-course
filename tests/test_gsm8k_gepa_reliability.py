@@ -79,3 +79,45 @@ def test_adapter_factory_rejects_unknown_adapter_names():
         assert "Unsupported adapter" in str(exc)
     else:
         raise AssertionError("Expected make_adapter to reject unknown adapter")
+
+
+def test_lm_factory_supports_ollama_solver_and_openai_bridge_reflector():
+    module = load_module()
+
+    solver = module.make_lm(
+        provider="ollama",
+        model="mistral:7b-instruct-q4_K_M",
+        base_url="http://127.0.0.1:11434",
+        api_key="",
+        temperature=0.0,
+        max_tokens=768,
+    )
+    reflector = module.make_lm(
+        provider="openai-compatible",
+        model="gpt-5.4",
+        base_url="http://kube1.lan:4001/v1",
+        api_key="sk-noauth",
+        temperature=0.7,
+        max_tokens=1024,
+    )
+
+    assert solver.model == "ollama_chat/mistral:7b-instruct-q4_K_M"
+    assert reflector.model == "openai/gpt-5.4"
+
+
+def test_lm_factory_requires_api_key_for_openai_compatible_even_if_dummy():
+    module = load_module()
+
+    try:
+        module.make_lm(
+            provider="openai-compatible",
+            model="gpt-5.4",
+            base_url="http://kube1.lan:4001/v1",
+            api_key="",
+            temperature=0.0,
+            max_tokens=20,
+        )
+    except ValueError as exc:
+        assert "api key or dummy key" in str(exc)
+    else:
+        raise AssertionError("Expected openai-compatible provider to require a non-empty key")

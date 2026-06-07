@@ -28,6 +28,10 @@ DEFAULT_DATA = "labs/prompt/data/gsm8k/test.jsonl"
 DEFAULT_RESULTS_DIR = "labs/prompt/results"
 DEFAULT_MODEL = "mistral:7b-instruct-q4_K_M"
 DEFAULT_BASE_URL = "http://127.0.0.1:11434"
+DEFAULT_REFLECTION_PROVIDER = "ollama"
+DEFAULT_REFLECTION_MODEL = DEFAULT_MODEL
+DEFAULT_REFLECTION_BASE_URL = DEFAULT_BASE_URL
+DEFAULT_REFLECTION_API_KEY = ""
 
 
 def normalize_numeric(text: Any | None) -> str | None:
@@ -235,11 +239,31 @@ def summarize_instruction(module: Any) -> str:
     return repr(module)
 
 
-def make_lm(*, model: str, base_url: str, temperature: float, max_tokens: int) -> dspy.LM:
+def make_lm(
+    *,
+    provider: str,
+    model: str,
+    base_url: str,
+    api_key: str,
+    temperature: float,
+    max_tokens: int,
+) -> dspy.LM:
+    normalized = provider.strip().lower()
+    if normalized == "ollama":
+        dspy_model = f"ollama_chat/{model}"
+        key = api_key
+    elif normalized in {"openai-compatible", "openai"}:
+        if not api_key:
+            raise ValueError("openai-compatible reflection providers require a non-empty api key or dummy key")
+        dspy_model = model if model.startswith("openai/") else f"openai/{model}"
+        key = api_key
+    else:
+        raise ValueError(f"Unsupported LM provider {provider!r}; expected 'ollama' or 'openai-compatible'")
+
     return dspy.LM(
-        f"ollama_chat/{model}",
+        dspy_model,
         api_base=base_url,
-        api_key="",
+        api_key=key,
         temperature=temperature,
         max_tokens=max_tokens,
         cache=False,
@@ -256,6 +280,10 @@ def main() -> int:
     parser.add_argument("--model", default=DEFAULT_MODEL)
     parser.add_argument("--base-url", default=DEFAULT_BASE_URL)
     parser.add_argument("--adapter", choices=["chat", "json"], default="chat")
+    parser.add_argument("--reflection-provider", choices=["ollama", "openai-compatible", "openai"], default=DEFAULT_REFLECTION_PROVIDER)
+    parser.add_argument("--reflection-model", default=DEFAULT_REFLECTION_MODEL)
+    parser.add_argument("--reflection-base-url", default=DEFAULT_REFLECTION_BASE_URL)
+    parser.add_argument("--reflection-api-key", default=DEFAULT_REFLECTION_API_KEY)
     parser.add_argument("--solver-temperature", type=float, default=0.0)
     parser.add_argument("--reflection-temperature", type=float, default=0.7)
     parser.add_argument("--solver-max-tokens", type=int, default=768)
@@ -271,14 +299,18 @@ def main() -> int:
     stamp = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H%M%SZ")
 
     solver_lm = make_lm(
+        provider="ollama",
         model=args.model,
         base_url=args.base_url,
+        api_key="",
         temperature=args.solver_temperature,
         max_tokens=args.solver_max_tokens,
     )
     reflection_lm = make_lm(
-        model=args.model,
-        base_url=args.base_url,
+        provider=args.reflection_provider,
+        model=args.reflection_model,
+        base_url=args.reflection_base_url,
+        api_key=args.reflection_api_key,
         temperature=args.reflection_temperature,
         max_tokens=args.reflection_max_tokens,
     )
@@ -326,6 +358,10 @@ def main() -> int:
         "model": args.model,
         "base_url": args.base_url,
         "adapter": args.adapter,
+        "reflection_provider": args.reflection_provider,
+        "reflection_model": args.reflection_model,
+        "reflection_base_url": args.reflection_base_url,
+        "reflection_api_key_set": bool(args.reflection_api_key),
         "data": str(data_path),
         "train_rows": [ex.row_number for ex in trainset],
         "val_rows": [ex.row_number for ex in valset],
@@ -354,6 +390,7 @@ def main() -> int:
         f"- DSPy version: `{result['dspy_version']}`",
         f"- Model: `{args.model}` via Ollama `{args.base_url}`",
         f"- Adapter: `{args.adapter}`",
+        f"- Reflection model: `{args.reflection_model}` via `{args.reflection_provider}` at `{args.reflection_base_url}`",
         f"- Train rows: `{result['train_rows']}`",
         f"- Validation rows: `{result['val_rows']}`",
         f"- Solver max tokens: {args.solver_max_tokens}",

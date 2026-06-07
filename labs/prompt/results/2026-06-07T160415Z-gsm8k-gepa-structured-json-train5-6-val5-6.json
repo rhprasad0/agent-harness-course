@@ -1,0 +1,87 @@
+{
+  "date": "2026-06-07T160415Z",
+  "dspy_version": "3.2.1",
+  "model": "mistral:7b-instruct-q4_K_M",
+  "base_url": "http://127.0.0.1:11434",
+  "adapter": "json",
+  "reflection_provider": "openai-compatible",
+  "reflection_model": "gpt-5.4",
+  "reflection_base_url": "http://kube1.lan:4001/v1",
+  "reflection_api_key_set": true,
+  "data": "labs/prompt/data/gsm8k/test.jsonl",
+  "train_rows": [
+    5,
+    6
+  ],
+  "val_rows": [
+    5,
+    6
+  ],
+  "solver_max_tokens": 768,
+  "reflection_max_tokens": 1536,
+  "max_metric_calls": 8,
+  "baseline_score": 0.0,
+  "compiled_score": 1.0,
+  "compiled_error": null,
+  "baseline_failure_counts": {
+    "math": 2
+  },
+  "compiled_failure_counts": {
+    "correct": 2
+  },
+  "baseline_rows": [
+    {
+      "row_number": 5,
+      "question": "Every day, Wendi feeds each of her chickens three cups of mixed chicken feed, containing seeds, mealworms and vegetables to help keep them healthy.  She gives the chickens their feed in three separate meals. In the morning, she gives her flock of chickens 15 cups of feed.  In the afternoon, she gives her chickens another 25 cups of feed.  How many cups of feed does she need to give her chickens in the final meal of the day if the size of Wendi's flock is 20 chickens?",
+      "gold_answer": 20,
+      "pred_answer_raw": 2,
+      "pred_answer_norm": 2,
+      "reasoning": "Wendi gives her chickens 15 cups of feed in the morning and another 25 cups in the afternoon, for a total of 40 cups. Since she has 20 chickens, we can divide the total amount of feed by the number of chickens to find out how much feed each chicken needs in the final meal.",
+      "score": 0.0,
+      "failure_type": "math",
+      "feedback": "Math failure: integer answer 2 does not match gold answer 20. Review the quantities, operations, and arithmetic before changing the final answer. Worked solution:\nIf each chicken eats 3 cups of feed per day, then for 20 chickens they would need 3*20=<<3*20=60>>60 cups of feed per day.\nIf she feeds the flock 15 cups of feed in the morning, and 25 cups in the afternoon, then the final meal would require 60-15-25=<<60-15-25=20>>20 cups of chicken feed.\n#### 20",
+      "error": null
+    },
+    {
+      "row_number": 6,
+      "question": "Kylar went to the store to buy glasses for his new apartment. One glass costs $5, but every second glass costs only 60% of the price. Kylar wants to buy 16 glasses. How much does he need to pay for them?",
+      "gold_answer": 64,
+      "pred_answer_raw": 95,
+      "pred_answer_norm": 95,
+      "reasoning": "Kylar needs to buy 16 glasses. The first glass costs $5, so the next 15 glasses will cost 60% of $5 each. To find out how much he needs to pay for all 16 glasses, we can add up the cost of the first glass and the next 15 glasses.",
+      "score": 0.0,
+      "failure_type": "math",
+      "feedback": "Math failure: integer answer 95 does not match gold answer 64. Review the quantities, operations, and arithmetic before changing the final answer. Worked solution:\nThe discount price of one glass is 60/100 * 5 = $<<60/100*5=3>>3.\nIf every second glass is cheaper, that means Kylar is going to buy 16 / 2 = <<16/2=8>>8 cheaper glasses.\nSo for the cheaper glasses, Kylar is going to pay 8 * 3 = $<<8*3=24>>24.\nAnd for the regular-priced glasses, Kylar will pay 8 * 5 = $<<8*5=40>>40.\nSo in total Kylar needs to pay 24 + 40 = $<<24+40=64>>64 for the glasses he wants to buy.\n#### 64",
+      "error": null
+    }
+  ],
+  "compiled_rows": [
+    {
+      "row_number": 5,
+      "question": "Every day, Wendi feeds each of her chickens three cups of mixed chicken feed, containing seeds, mealworms and vegetables to help keep them healthy.  She gives the chickens their feed in three separate meals. In the morning, she gives her flock of chickens 15 cups of feed.  In the afternoon, she gives her chickens another 25 cups of feed.  How many cups of feed does she need to give her chickens in the final meal of the day if the size of Wendi's flock is 20 chickens?",
+      "gold_answer": 20,
+      "pred_answer_raw": 20,
+      "pred_answer_norm": 20,
+      "reasoning": "Wendi feeds her chickens three cups of mixed chicken feed per day. She has 20 chickens, so she needs to give them a total of 20 x 3 = <<20*3=60>>60 cups of feed per day. In the morning, she gives them 15 cups and in the afternoon, she gives them another 25 cups. So far, she has given them 15 + 25 = <<15+25=40>>40 cups of feed. She still needs to give them 60 - 40 = <<60-40=20>>20 more cups of feed in the final meal of the day.",
+      "score": 1.0,
+      "failure_type": "correct",
+      "feedback": "Correct. Integer answer 20 matches gold answer 20.",
+      "error": null
+    },
+    {
+      "row_number": 6,
+      "question": "Kylar went to the store to buy glasses for his new apartment. One glass costs $5, but every second glass costs only 60% of the price. Kylar wants to buy 16 glasses. How much does he need to pay for them?",
+      "gold_answer": 64,
+      "pred_answer_raw": 64,
+      "pred_answer_norm": 64,
+      "reasoning": "Kylar needs to buy 16 glasses. One glass costs $5, and every second glass costs 60% of the price. To find out how much he needs to pay for all 16 glasses, we first need to determine how many full-priced glasses and discounted glasses there are. Since there are 16 glasses in total, half of them (8) will be full-priced, and half (8) will be discounted. We then calculate the cost of each group separately. For the full-priced glasses, we multiply the number of glasses by the price per glass: 8 x $5 = $<<8*5=40>>40. For the discounted glasses, we first calculate the discounted price for one glass by multiplying the regular price by 60%: $5 x 0.6 = $<<5*0.6=3>>3. We then multiply this discounted price by the number of discounted glasses: 8 x $3 = $<<8*3=24>>24. Finally, we add the cost of both groups to find the total amount Kylar needs to pay: $40 + $24 = $<<40+24=64>>64.",
+      "score": 1.0,
+      "failure_type": "correct",
+      "feedback": "Correct. Integer answer 64 matches gold answer 64.",
+      "error": null
+    }
+  ],
+  "baseline_program_repr": "solve = Predict(GSM8KStructuredSignature(question -> reasoning, answer\n    instructions='Solve a grade-school math word problem. Compute carefully and return a clean structured answer.'\n    question = Field(annotation=str required=True json_schema_extra={'desc': 'GSM8K math word problem', '__dspy_field_type': 'input', 'prefix': 'Question:'})\n    reasoning = Field(annotation=str required=True json_schema_extra={'desc': 'brief arithmetic reasoning; include only steps needed to justify the final answer', '__dspy_field_type': 'output', 'prefix': 'Reasoning:'})\n    answer = Field(annotation=int required=True json_schema_extra={'desc': 'final integer answer only; no units, commas, words, or equations', '__dspy_field_type': 'output', 'prefix': 'Answer:'})\n))",
+  "compiled_program_repr": "solve = Predict(StringSignature(question -> reasoning, answer\n    instructions='You are solving a grade-school arithmetic word problem from an input field named `question`.\\n\\nRequirements:\\n1. Read the full question carefully and identify:\\n   - what total quantity is required,\\n   - all given numbers,\\n   - the relationships between them,\\n   - whether values should be added, subtracted, multiplied, divided, or grouped into pairs/sets.\\n2. Perform the computation step by step, checking that each operation matches the wording of the problem.\\n3. Pay special attention to common patterns:\\n   - If a per-person/per-animal/per-item daily amount is given, first compute the total by multiplying rate × number of people/animals/items.\\n   - If some amount has already been used or given earlier, subtract those amounts from the total needed.\\n   - If “every second item” has a discount, then half of the items are full price and half are discounted (when the total count is even). Compute discounted price as the stated percentage of the regular price, then total both groups separately.\\n4. Double-check arithmetic before finalizing the answer. Make sure the final number answers the exact question asked.\\n5. Do not invent extra assumptions. Use only the information in the problem.\\n\\nOutput format:\\n- `reasoning`: a short, clear step-by-step solution showing the key calculations.\\n- `answer`: the final numeric answer only, with no extra words unless the problem explicitly requires units or currency formatting.\\n\\nBe especially careful not to:\\n- divide when the problem requires finding a remaining total,\\n- treat “every second item costs X%” as meaning all remaining items are discounted,\\n- give a final answer that does not correspond to the quantity asked.'\n    question = Field(annotation=str required=True json_schema_extra={'desc': 'GSM8K math word problem', '__dspy_field_type': 'input', 'prefix': 'Question:'})\n    reasoning = Field(annotation=str required=True json_schema_extra={'desc': 'brief arithmetic reasoning; include only steps needed to justify the final answer', '__dspy_field_type': 'output', 'prefix': 'Reasoning:'})\n    answer = Field(annotation=int required=True json_schema_extra={'desc': 'final integer answer only; no units, commas, words, or equations', '__dspy_field_type': 'output', 'prefix': 'Answer:'})\n))",
+  "has_detailed_results": true
+}
