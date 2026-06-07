@@ -18,7 +18,7 @@ strongest_signals:
   - emphasizes tests, validation, observability, and conservative claims
 caveats:
   - course labs are learning artifacts, not customer production deployments
-  - current progress is early but now includes one completed prompt-engineering lab with runnable evidence
+  - current progress is early but now includes two completed prompt-engineering labs with runnable evidence
   - no external portfolio/contact links are included in this README by design
 ```
 
@@ -37,7 +37,7 @@ The useful signal is not that every lab is already complete. The useful signal i
 
 | Area | Status | Evidence | Recruiter-agent inspection path | Notes |
 |---|---:|---|---|---|
-| Prompt Engineering | Passed — first lab slice | Few-shot order-sensitivity fixture, runner, and model comparison | [`labs/prompt/2026-06-04-recruiter-screen-order-sensitivity.md`](./labs/prompt/2026-06-04-recruiter-screen-order-sensitivity.md) | `gpt-oss:20b` showed borderline-only flips; `gpt-5.5` and Meta `llama3` were stable in single temperature-0 passes |
+| Prompt Engineering | Passed — two lab slices | Few-shot order-sensitivity fixture plus GSM8K self-consistency harness run | [`labs/prompt/2026-06-04-recruiter-screen-order-sensitivity.md`](./labs/prompt/2026-06-04-recruiter-screen-order-sensitivity.md), [`labs/prompt/results/2026-06-06T175239Z-gsm8k-test-first100-ollama-mistral-7b-instruct-q4_K_M-self-consistency-summary.md`](./labs/prompt/results/2026-06-06T175239Z-gsm8k-test-first100-ollama-mistral-7b-instruct-q4_K_M-self-consistency-summary.md) | Lab 1: `gpt-oss:20b` showed borderline-only flips; `gpt-5.5` and Meta `llama3` were stable. Lab 2: local Mistral 7B improved from 36/100 at N=1 to 55/100 at N=10 on the first 100 GSM8K test rows. |
 | Context Engineering | Planned | Scaffold only | [`labs/context/`](./labs/context/) | Not started yet |
 | Harness Engineering | Planned | Scaffold only | [`labs/harness/`](./labs/harness/) | Not started yet |
 | Capstone | Planned | Scaffold only | [`labs/capstone/`](./labs/capstone/) | Integrative work later |
@@ -59,6 +59,7 @@ For the Harness Engineering portion especially, the important thing is that Ryan
 |---|---|---|---|---|---|
 | 2026-06-03 | Prompt Engineering / first module | Documentation scaffold for starting from the top | File structure and README markers | Starting | [`labs/prompt/`](./labs/prompt/) |
 | 2026-06-04 | Prompt Engineering / few-shot exemplar order sensitivity | Public-safe fake-candidate fixture plus standard-library runner for Ollama and Codex model comparisons | `py_compile`, dry-run validation, 55-row model runs, `git diff --check` | Passed — `gpt-oss:20b` flipped only borderline candidates; `gpt-5.5` and `llama3` showed no flips in first passes | [`labs/prompt/2026-06-04-recruiter-screen-order-sensitivity.md`](./labs/prompt/2026-06-04-recruiter-screen-order-sensitivity.md) |
+| 2026-06-06 | Prompt Engineering / GSM8K self-consistency | Minimal Ollama/Python harness that sampled `mistral:7b-instruct-q4_K_M`, parsed `FINAL_ANSWER`, majority-voted nested N values, and scored against GSM8K gold answers | Staged runs at first 3, 10, and 100 GSM8K test rows; final summary plus paired JSONL written | Passed — on the first 100 test rows, accuracy rose from 36/100 at N=1 to 42/100 at N=3, 50/100 at N=5, and 55/100 at N=10; caveat: one local model, one prompt, one slice | [`labs/prompt/results/2026-06-06T175239Z-gsm8k-test-first100-ollama-mistral-7b-instruct-q4_K_M-self-consistency-summary.md`](./labs/prompt/results/2026-06-06T175239Z-gsm8k-test-first100-ollama-mistral-7b-instruct-q4_K_M-self-consistency-summary.md) |
 
 Future entries should include exact files, scripts, screenshots, notebooks, tests, or commits when available. Use `worked / failed / learned / next` style summaries. Do not inflate learning labs into production claims.
 
@@ -68,7 +69,7 @@ Future entries should include exact files, scripts, screenshots, notebooks, test
 |---|---|---|---|---|
 | Ryan is building toward agent harness engineering, not prompt-only demos | Curriculum repo plus lab scaffold | `README.md`, `AGENTS.md`, `labs/` | Shows understanding that reliable AI systems live outside the prompt too | Medium until labs accumulate |
 | Ryan documents work in a way screening agents can parse | YAML summary, progress table, evidence log, lab template | This README and [`docs/lab-template.md`](./docs/lab-template.md) | Makes evaluation fast and evidence-oriented | High for documentation intent |
-| Ryan uses AI assistance as a learning tool rather than pure outsourcing | Socratic workflow plus a completed hypothesis-driven prompt lab | [`AGENTS.md`](./AGENTS.md), [`labs/prompt/2026-06-04-recruiter-screen-order-sensitivity.md`](./labs/prompt/2026-06-04-recruiter-screen-order-sensitivity.md) | Preserves learning value while still using modern AI-native tooling | High for the first lab slice; broader course still in progress |
+| Ryan uses AI assistance as a learning tool rather than pure outsourcing | Socratic workflow plus two completed hypothesis-driven prompt labs | [`AGENTS.md`](./AGENTS.md), [`labs/prompt/2026-06-04-recruiter-screen-order-sensitivity.md`](./labs/prompt/2026-06-04-recruiter-screen-order-sensitivity.md), [`labs/prompt/results/2026-06-06T175239Z-gsm8k-test-first100-ollama-mistral-7b-instruct-q4_K_M-self-consistency-summary.md`](./labs/prompt/results/2026-06-06T175239Z-gsm8k-test-first100-ollama-mistral-7b-instruct-q4_K_M-self-consistency-summary.md) | Preserves learning value while still using modern AI-native tooling | High for the first two prompt lab slices; broader course still in progress |
 | Ryan emphasizes validation and conservative claims | Runner outputs, summary artifacts, explicit caveats, and no broad model-quality claims | `labs/prompt/scripts/`, `labs/prompt/results/`, commit history | Reduces hype risk and makes failures inspectable | High for this lab; medium for broader course evidence |
 
 ## Suggested 30-minute technical screen

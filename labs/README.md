@@ -8,7 +8,7 @@ The curriculum itself lives in [`../index.html`](../index.html) and at [`harness
 
 | Area | Status | Notes |
 |---|---:|---|
-| [Prompt Engineering](./prompt/) | Passed — first lab slice | Completed a recruiter-facing few-shot order-sensitivity lab with fake candidates, a reusable runner, and model comparison artifacts. |
+| [Prompt Engineering](./prompt/) | Passed — two lab slices | Completed a recruiter-facing few-shot order-sensitivity lab and a GSM8K self-consistency harness run with local Ollama/Mistral evidence artifacts. |
 | [Context Engineering](./context/) | Planned | Not started yet. |
 | [Harness Engineering](./harness/) | Planned | Not started yet. |
 | [Capstone](./capstone/) | Planned | Not started yet. |
