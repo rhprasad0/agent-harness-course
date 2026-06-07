@@ -472,29 +472,59 @@ Held-out result:
 
 Interpretation:
 
-- No `adapter` or `format` failures appeared on the held-out slice, so the JSON schema is stable enough for a larger run.
+- No `adapter` or `format` failures appeared on the held-out slice, so the JSON schema is stable enough for a larger run with Mistral.
 - GEPA proposed multiple plausible instruction mutations, but none were accepted as improving the validation score; compiled matched baseline exactly.
-- The current bottleneck is no longer parsing. It is local Mistral's arithmetic/word-problem reasoning under single-call JSON output.
+- The current Mistral bottleneck is no longer parsing. It is local Mistral's arithmetic/word-problem reasoning under single-call JSON output.
 - Scaling is safe from a harness perspective, but not promising as an optimization-win path unless we add a stronger solver, repeated sampling, or a more targeted dev/validation design.
+
+## Llama2 solver comparison on the same split
+
+Ryan asked to rerun the exact doubled split with `llama2:7b-chat-q4_0` as the solver while keeping JSONAdapter and GPT-5.4 reflection fixed.
+
+Command difference:
+
+```sh
+--model llama2:7b-chat-q4_0
+```
+
+Artifact:
+
+- [`results/2026-06-07T163004Z-gsm8k-gepa-structured-json-train5-12-val13-28-summary.md`](./results/2026-06-07T163004Z-gsm8k-gepa-structured-json-train5-12-val13-28-summary.md)
+
+Held-out result:
+
+| Solver | Run | Score | Failure counts | Correct rows |
+|---|---|---:|---|---|
+| Mistral 7B | Structured JSON baseline | `3/16` | `{'math': 13, 'correct': 3}` | 20, 24, 26 |
+| Mistral 7B | GEPA compiled | `3/16` | `{'math': 13, 'correct': 3}` | 20, 24, 26 |
+| Llama2 7B Chat | Structured JSON baseline | `0/16` | `{'adapter': 12, 'math': 4}` | none |
+| Llama2 7B Chat | GEPA compiled | `2/16` | `{'adapter': 8, 'math': 6, 'correct': 2}` | 23, 24 |
+
+Interpretation:
+
+- Llama2 was much less JSON-compliant than Mistral on this DSPy signature: baseline had 12 adapter failures out of 16.
+- GPT-5.4 reflection improved Llama2's compiled program from `0/16` to `2/16`, rescuing rows 23 and 24 and reducing adapter failures from 12 to 8.
+- This is a real positive delta for the weaker solver, but the absolute performance is poor and the failure mix is parser-heavy.
+- For Llama2, the next bottleneck is JSON/schema compliance before math reasoning. For Mistral, the next bottleneck is math reasoning after schema compliance.
 
 ## Result
 
-- Outcome: Attempted / first positive GEPA mechanism smoke; doubled held-out pre-flight found no generalization win.
-- What worked: The reusable prompt-template evaluator works; first-pass APE results are recorded; DSPy 3.2.1 installed in a temporary venv; local Ollama works through DSPy; `dspy.GEPA` ran with a score+feedback metric; the structured harness now records format, adapter, and math failures separately; repeated adapter checks produced no format/adapter failures across 24 structured row-evaluations; GPT-5.4 via the Codex bridge produced a useful GEPA mutation on a targeted 2-row smoke; the row-7 guard converted a runaway adapter failure into a clean math failure; the doubled held-out pre-flight had zero adapter/format failures.
-- What failed or surprised me: First-pass APE did not beat the hand baseline. The local-only optimizer produced weak/generic candidates. The initial tiny GEPA smoke tied baseline at 1/4 and exposed practical issues. After the reliability redesign, the tiny structured GEPA smoke still showed no optimization win, but the failures were cleanly classified. ChatAdapter still showed answer variance despite temperature 0.0. JSONAdapter can still trigger local-model reasoning failures, but the guard reduced schema/runaway failure on row 7. The doubled held-out GPT-5.4-reflection run tied baseline at 3/16.
-- What changed between expected and observed behavior: The original broad hypothesis is not supported by first-pass APE, local-only GEPA, or the doubled held-out GPT-5.4-reflection pre-flight. The targeted GPT-5.4-reflection smoke supports only the narrower bottleneck hypothesis: stronger reflection plus clean feedback can produce useful instruction mutations on specific failures. Held-out evidence does not yet show generalized improvement.
+- Outcome: Attempted / first positive GEPA mechanism smoke; doubled held-out Mistral pre-flight found no generalization win; same split with Llama2 showed a small GEPA gain from `0/16` to `2/16` but remained parser-heavy.
+- What worked: The reusable prompt-template evaluator works; first-pass APE results are recorded; DSPy 3.2.1 installed in a temporary venv; local Ollama works through DSPy; `dspy.GEPA` ran with a score+feedback metric; the structured harness now records format, adapter, and math failures separately; repeated adapter checks produced no format/adapter failures across 24 structured row-evaluations; GPT-5.4 via the Codex bridge produced a useful GEPA mutation on a targeted 2-row smoke; the row-7 guard converted a runaway adapter failure into a clean math failure; the doubled Mistral held-out pre-flight had zero adapter/format failures; the Llama2 rerun showed GPT-5.4 reflection can improve a weaker parser-heavy solver from no correct rows to two correct rows.
+- What failed or surprised me: First-pass APE did not beat the hand baseline. The local-only optimizer produced weak/generic candidates. The initial tiny GEPA smoke tied baseline at 1/4 and exposed practical issues. After the reliability redesign, the tiny structured GEPA smoke still showed no optimization win, but the failures were cleanly classified. ChatAdapter still showed answer variance despite temperature 0.0. JSONAdapter can still trigger local-model reasoning failures, but the guard reduced schema/runaway failure on row 7. The doubled held-out GPT-5.4-reflection run tied Mistral baseline at 3/16. Llama2 was far less JSON-compliant than Mistral on the same signature.
+- What changed between expected and observed behavior: The original broad hypothesis is not supported by first-pass APE, local-only GEPA, or the doubled held-out Mistral GPT-5.4-reflection pre-flight. The targeted GPT-5.4-reflection smoke and Llama2 rerun support a narrower hypothesis: stronger reflection plus clean feedback can produce useful instruction mutations for specific weak-solver failure modes. Held-out evidence still does not show a strong generalized improvement.
 
 ## Recruiter-agent inspection notes
 
-- Claim supported: Ryan is setting up a controlled prompt-optimization comparison rather than hand-tuning by vibes; the shared evaluator foundation has been smoke-tested; first-pass APE, local GEPA, adapter stability, row-7 guard behavior, a GPT-5.4-reflection mechanism smoke, and a doubled held-out pre-flight are recorded with conservative claims.
-- Evidence path: This note, [`scripts/evaluate_gsm8k_prompt_ollama.py`](./scripts/evaluate_gsm8k_prompt_ollama.py), [`scripts/run_gsm8k_gepa_dspy_smoke.py`](./scripts/run_gsm8k_gepa_dspy_smoke.py), [`results/2026-06-07-ape-local-vs-hybrid-dev30-scoreboard.md`](./results/2026-06-07-ape-local-vs-hybrid-dev30-scoreboard.md), [`results/2026-06-07T150719Z-gsm8k-gepa-smoke-train1-4-val5-8-summary.md`](./results/2026-06-07T150719Z-gsm8k-gepa-smoke-train1-4-val5-8-summary.md), [`results/2026-06-07T154424Z-gsm8k-gepa-structured-chat-train1-2-val5-6-summary.md`](./results/2026-06-07T154424Z-gsm8k-gepa-structured-chat-train1-2-val5-6-summary.md), [`results/2026-06-07-gsm8k-structured-adapter-stability-summary.md`](./results/2026-06-07-gsm8k-structured-adapter-stability-summary.md), [`results/2026-06-07T160415Z-gsm8k-gepa-structured-json-train5-6-val5-6-summary.md`](./results/2026-06-07T160415Z-gsm8k-gepa-structured-json-train5-6-val5-6-summary.md), [`results/2026-06-07T162005Z-gsm8k-gepa-structured-json-train1-1-val7-7-summary.md`](./results/2026-06-07T162005Z-gsm8k-gepa-structured-json-train1-1-val7-7-summary.md), and [`results/2026-06-07T162311Z-gsm8k-gepa-structured-json-train5-12-val13-28-summary.md`](./results/2026-06-07T162311Z-gsm8k-gepa-structured-json-train5-12-val13-28-summary.md).
-- Confidence: High that the harness/GEPA setup path is now inspectable and has explicit reliability tests; high that JSON output is stable enough for larger runs; medium that stronger reflection can help targeted failure classes; low that prompt optimization alone improves held-out performance with local Mistral as the single-call solver.
-- Caveat: The positive GPT-5.4-reflection smoke is a tiny same-row train/validation check; the doubled held-out pre-flight tied baseline, so there is no held-out optimization win yet.
+- Claim supported: Ryan is setting up a controlled prompt-optimization comparison rather than hand-tuning by vibes; the shared evaluator foundation has been smoke-tested; first-pass APE, local GEPA, adapter stability, row-7 guard behavior, a GPT-5.4-reflection mechanism smoke, a doubled Mistral held-out pre-flight, and a same-split Llama2 solver comparison are recorded with conservative claims.
+- Evidence path: This note, [`scripts/evaluate_gsm8k_prompt_ollama.py`](./scripts/evaluate_gsm8k_prompt_ollama.py), [`scripts/run_gsm8k_gepa_dspy_smoke.py`](./scripts/run_gsm8k_gepa_dspy_smoke.py), [`results/2026-06-07-ape-local-vs-hybrid-dev30-scoreboard.md`](./results/2026-06-07-ape-local-vs-hybrid-dev30-scoreboard.md), [`results/2026-06-07T150719Z-gsm8k-gepa-smoke-train1-4-val5-8-summary.md`](./results/2026-06-07T150719Z-gsm8k-gepa-smoke-train1-4-val5-8-summary.md), [`results/2026-06-07T154424Z-gsm8k-gepa-structured-chat-train1-2-val5-6-summary.md`](./results/2026-06-07T154424Z-gsm8k-gepa-structured-chat-train1-2-val5-6-summary.md), [`results/2026-06-07-gsm8k-structured-adapter-stability-summary.md`](./results/2026-06-07-gsm8k-structured-adapter-stability-summary.md), [`results/2026-06-07T160415Z-gsm8k-gepa-structured-json-train5-6-val5-6-summary.md`](./results/2026-06-07T160415Z-gsm8k-gepa-structured-json-train5-6-val5-6-summary.md), [`results/2026-06-07T162005Z-gsm8k-gepa-structured-json-train1-1-val7-7-summary.md`](./results/2026-06-07T162005Z-gsm8k-gepa-structured-json-train1-1-val7-7-summary.md), [`results/2026-06-07T162311Z-gsm8k-gepa-structured-json-train5-12-val13-28-summary.md`](./results/2026-06-07T162311Z-gsm8k-gepa-structured-json-train5-12-val13-28-summary.md), and [`results/2026-06-07T163004Z-gsm8k-gepa-structured-json-train5-12-val13-28-summary.md`](./results/2026-06-07T163004Z-gsm8k-gepa-structured-json-train5-12-val13-28-summary.md).
+- Confidence: High that the harness/GEPA setup path is now inspectable and has explicit reliability tests; high that JSON output is stable enough for Mistral larger runs; low that JSON output is stable enough for Llama2 without more schema work; medium that stronger reflection can help targeted failure classes; low that prompt optimization alone improves held-out performance with these local 7B single-call solvers.
+- Caveat: The positive GPT-5.4-reflection smoke is a tiny same-row train/validation check; the doubled Mistral held-out pre-flight tied baseline; the Llama2 run improved from `0/16` to `2/16` but remained dominated by adapter failures.
 
 ## Next step
 
 Choose the next scaling path deliberately:
 
-1. **Harness-scale path:** run a larger JSON/GPT-5.4-reflection GEPA job now that adapter failures are controlled, but expect a low chance of held-out gain with local Mistral single-call solving.
+1. **Harness-scale path:** run a larger JSON/GPT-5.4-reflection GEPA job now that adapter failures are controlled for Mistral, but expect a low chance of held-out gain with local 7B single-call solving.
 2. **Capability path:** switch the solver to a stronger local model or add self-consistency around the compiled prompt, then compare against the existing N=10 self-consistency ceiling.
-3. **Diagnostic path:** inspect the 13 held-out math failures, cluster them by error type, and build a smaller targeted train/validation split before spending more GEPA calls.
+3. **Diagnostic path:** inspect the Mistral math failures or Llama2 adapter failures, cluster them by error type, and build a smaller targeted train/validation split before spending more GEPA calls.
