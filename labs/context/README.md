@@ -1,8 +1,8 @@
 # Context Engineering Labs
 
-Status: **Planned**
+Status: **Passed — first context-rot slice**
 
-Context Engineering work has not started yet.
+Context Engineering work has started with a local Llama2 context-rot probe. The first slice built a small Ollama harness, varied context length and answer placement, and recorded strict answer-only accuracy plus actual `prompt_eval_count` from Ollama.
 
 When this section begins, document how context is selected, structured, compressed, retrieved, or omitted. The key question is not only "what did the model see?" but "why was that the right window for this step?"
 
@@ -11,6 +11,7 @@ When this section begins, document how context is selected, structured, compress
 | Date | Lab | Status | Evidence | Notes |
 |---|---|---:|---|---|
 | 2026-06-03 | Context Engineering section | Planned | Scaffold only | Not started yet. |
+| 2026-06-12 | Llama2 context-rot / lost-in-the-middle probe | Passed — first slice | [`2026-06-12-context-rot-llama2.md`](./2026-06-12-context-rot-llama2.md), [`results/2026-06-12T140407Z-context-rot-llama2-summary.md`](./results/2026-06-12T140407Z-context-rot-llama2-summary.md) | Clean-window run did not support the lost-in-the-middle hypothesis; middle placement scored 3/3 at the long setting, while the original 3072-target run saturated Llama2's 4096-token context boundary. |
 
 ## Socratic starter questions
 

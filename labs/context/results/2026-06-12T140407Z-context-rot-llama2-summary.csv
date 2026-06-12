@@ -1,0 +1,10 @@
+target_context_tokens,length_label,position,trials,correct,accuracy,avg_prompt_eval_count,avg_elapsed_seconds,failure_counts
+512,short,beginning,3,3,1.0,792.7,0.631,correct=3
+512,short,end,3,3,1.0,773.7,0.502,correct=3
+512,short,middle,3,3,1.0,797.3,0.526,correct=3
+1536,medium,beginning,3,3,1.0,2192.7,1.076,correct=3
+1536,medium,end,3,3,1.0,2205.3,1.226,correct=3
+1536,medium,middle,3,3,1.0,2184,1.227,correct=3
+2300,long,beginning,3,1,0.3333333333333333,3267.3,1.719,correct=1; extra_text=2
+2300,long,end,3,2,0.6666666666666666,3225.7,1.76,correct=2; extra_text=1
+2300,long,middle,3,3,1.0,3273,1.811,correct=3

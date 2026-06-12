@@ -1,0 +1,10 @@
+target_context_tokens,length_label,position,trials,correct,accuracy,avg_prompt_eval_count,avg_elapsed_seconds,failure_counts
+512,short,beginning,3,3,1.0,792.7,0.477,correct=3
+512,short,end,3,3,1.0,773.7,0.455,correct=3
+512,short,middle,3,3,1.0,797.3,0.459,correct=3
+1536,medium,beginning,3,3,1.0,2192.7,1.047,correct=3
+1536,medium,end,3,3,1.0,2205.3,1.248,correct=3
+1536,medium,middle,3,3,1.0,2184,1.203,correct=3
+3072,long,beginning,3,0,0.0,4095,2.165,format_error=3
+3072,long,end,3,0,0.0,4095,1.738,extra_text=3
+3072,long,middle,3,0,0.0,4095,1.844,format_error=3

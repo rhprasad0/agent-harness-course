@@ -1,0 +1,4 @@
+target_context_tokens,length_label,position,trials,correct,accuracy,avg_prompt_eval_count,avg_elapsed_seconds,failure_counts
+512,short,beginning,1,1,1.0,796,2.322,correct=1
+512,short,end,1,1,1.0,774,0.491,correct=1
+512,short,middle,1,1,1.0,804,0.509,correct=1
