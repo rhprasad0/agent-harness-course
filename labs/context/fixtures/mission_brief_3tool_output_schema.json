@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Mission Brief Three-Tool Routing Decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "selected_tools",
+    "needs_clarification",
+    "rationale",
+    "confidence"
+  ],
+  "properties": {
+    "selected_tools": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "evidence_reader",
+          "brief_drafter",
+          "human_review_gate"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "needs_clarification": {
+      "type": "boolean"
+    },
+    "rationale": {
+      "type": "string"
+    },
+    "confidence": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    }
+  }
+}

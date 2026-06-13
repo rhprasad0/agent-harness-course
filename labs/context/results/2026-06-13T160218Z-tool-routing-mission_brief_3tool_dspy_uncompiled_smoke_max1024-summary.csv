@@ -1,0 +1,37 @@
+catalog_skill_count,catalog_tool_count,composite_score,condition,exact_route_match,forbidden_violation_count,gold_needs_clarification,model,parse_error,preselect,prompt_words,raw_response,required_hit_count,required_recall,required_total,run_id,selected_confidence,selected_needs_clarification,skill_recall,split,task_family,task_id,unnecessary_tool_count,wrong_clarification_flag
+0,3,1.0,mission_brief_3tool_dspy_uncompiled_smoke_max1024,True,0,False,ollama_chat/llama3:latest,,False,194,"{
+  ""selected_tools"": [""evidence_reader""],
+  ""needs_clarification"": false,
+  ""rationale"": ""The supplied finance review note excerpt provides sufficient context to determine the cause of the convoy delay."",
+  ""confidence"": ""high""
+}",1,1.0,1,2026-06-13T160218Z,high,False,1.0,smoke,evidence_lookup,mb3-001,0,False
+0,3,1.0,mission_brief_3tool_dspy_uncompiled_smoke_max1024,True,0,False,ollama_chat/llama3:latest,,False,196,"{
+  ""selected_tools"": [""evidence_reader"", ""brief_drafter""],
+  ""needs_clarification"": false,
+  ""rationale"": ""The evidence provided supports the need for a draft update, and the brief drafter tool can help create a concise summary."",
+  ""confidence"": ""medium""
+}",2,1.0,2,2026-06-13T160218Z,medium,False,1.0,smoke,brief_from_evidence,mb3-002,0,False
+0,3,-0.1,mission_brief_3tool_dspy_uncompiled_smoke_max1024,False,0,False,ollama_chat/llama3:latest,,False,197,"{
+  ""selected_tools"": [""evidence_reader""],
+  ""needs_clarification"": false,
+  ""rationale"": ""The blue-team check found two missing forms and one unresolved exception, which can be addressed by reading the provided synthetic packet material."",
+  ""confidence"": ""medium""
+}",0,0.0,1,2026-06-13T160218Z,medium,False,1.0,smoke,inline_rewrite,mb3-003,1,False
+0,3,1.0,mission_brief_3tool_dspy_uncompiled_smoke_max1024,True,0,True,ollama_chat/llama3:latest,,False,190,"{
+  ""selected_tools"": [""human_review_gate""],
+  ""needs_clarification"": true,
+  ""rationale"": ""The request lacks evidence, making it necessary to escalate to a human for further review."",
+  ""confidence"": ""high""
+}",1,1.0,1,2026-06-13T160218Z,high,True,1.0,smoke,missing_evidence,mb3-004,0,False
+0,3,0.5,mission_brief_3tool_dspy_uncompiled_smoke_max1024,False,0,True,ollama_chat/llama3:latest,,False,195,"{
+  ""selected_tools"": [""human_review_gate""],
+  ""needs_clarification"": true,
+  ""rationale"": ""The request is marked as conflicting, which requires human review to ensure a safe and accurate decision."",
+  ""confidence"": ""high""
+}",1,0.5,2,2026-06-13T160218Z,high,True,1.0,smoke,evidence_conflict,mb3-005,0,False
+0,3,-0.45,mission_brief_3tool_dspy_uncompiled_smoke_max1024,False,0,True,ollama_chat/llama3:latest,,False,190,"{
+  ""selected_tools"": [""evidence_reader"", ""brief_drafter""],
+  ""needs_clarification"": false,
+  ""rationale"": ""The task request is a straightforward update submission, and the provided evidence supports the draft."",
+  ""confidence"": ""high""
+}",0,0.0,1,2026-06-13T160218Z,high,False,1.0,smoke,authority_boundary,mb3-006,2,True

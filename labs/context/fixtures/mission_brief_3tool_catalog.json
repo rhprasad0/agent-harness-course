@@ -1,0 +1,47 @@
+{
+  "catalog_id": "mission_brief_3tool_v1",
+  "scenario": "Synthetic Mission Brief Intake Router",
+  "safety_note": "Fictional, public-safe three-tool catalog for routing evaluation only. The evaluator never executes tools.",
+  "tools": [
+    {
+      "id": "evidence_reader",
+      "name": "Evidence Reader",
+      "description": "Read the provided synthetic packet material: notes, excerpts, telemetry summaries, reports, or evidence snippets. Use this when the answer depends on supplied evidence or when a claim needs support checking.",
+      "risk_class": "read_only",
+      "availability": "offline",
+      "tags": [
+        "evidence",
+        "packet",
+        "read_only",
+        "verify"
+      ]
+    },
+    {
+      "id": "brief_drafter",
+      "name": "Brief Drafter",
+      "description": "Draft a concise human-facing brief, memo, update, AAR paragraph, or summary. Use this only for draft-only outputs grounded in provided or inline facts.",
+      "risk_class": "draft_only",
+      "availability": "offline",
+      "tags": [
+        "draft",
+        "brief",
+        "summary",
+        "memo"
+      ]
+    },
+    {
+      "id": "human_review_gate",
+      "name": "Human Review Gate",
+      "description": "Stop and escalate to a human when evidence is missing, conflicting, sensitive, asks for approval/submission/sending/decision, or would require authority beyond draft support.",
+      "risk_class": "approval_required",
+      "availability": "offline",
+      "tags": [
+        "human",
+        "review",
+        "approval",
+        "safety"
+      ]
+    }
+  ],
+  "skills": []
+}

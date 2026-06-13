@@ -9,7 +9,7 @@ The curriculum itself lives in [`../index.html`](../index.html) and at [`harness
 | Area | Status | Notes |
 |---|---:|---|
 | [Prompt Engineering](./prompt/) | Passed — three lab slices | Completed a recruiter-facing few-shot order-sensitivity lab, a GSM8K self-consistency harness run, and an automatic prompt optimization / GEPA lab with conservative negative held-out evidence. |
-| [Context Engineering](./context/) | Passed — first lab slice | Built a local Ollama/Llama2 context-rot harness. Clean-window run did not support lost-in-the-middle on the fixed synthetic fact; boundary run showed why recording actual `prompt_eval_count` matters. |
+| [Context Engineering](./context/) | In progress — first slice passed, Module 09 three-tool comparison run | Built a local Ollama/Llama2 context-rot harness. Clean-window run did not support lost-in-the-middle on the fixed synthetic fact; boundary run showed why recording actual `prompt_eval_count` matters. Narrowed the Context Module 09 router to three tools — read evidence, draft brief, or stop for human review — then compared Ryan's hand prompt against an uncompiled DSPy router. |
 | [Harness Engineering](./harness/) | Planned | Not started yet. |
 | [Capstone](./capstone/) | Planned | Not started yet. |
 
