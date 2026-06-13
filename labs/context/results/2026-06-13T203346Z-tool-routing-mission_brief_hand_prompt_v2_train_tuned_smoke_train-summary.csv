@@ -1,0 +1,121 @@
+catalog_skill_count,catalog_tool_count,composite_score,condition,elapsed_seconds,exact_route_match,forbidden_violation_count,gold_needs_clarification,model,num_ctx,num_predict,ollama_done_reason,ollama_eval_count,ollama_prompt_eval_count,parse_error,preselect,prompt_chars,prompt_sha256,prompt_words,raw_response,required_hit_count,required_recall,required_total,run_id,selected_confidence,selected_needs_clarification,skill_recall,split,task_family,task_id,temperature,unnecessary_tool_count,wrong_clarification_flag
+0,3,1.0,mission_brief_hand_prompt_v2_train_tuned_smoke_train,3.697,True,0,False,llama3:latest,8192,512,stop,58,1347,,False,5535,df4fedb6fbcba375868758956794c1a2345d785528f846402d1d11707f22beff,710,"Here is the output of the Hand-written router prompt v2:
+
+{
+  ""selected_tools"": [""evidence_reader""],
+  ""needs_clarification"": false,
+  ""rationale"": ""The request asks to use only the packet excerpt."",
+  ""confidence"": ""high""
+}",1,1.0,1,2026-06-13T203346Z,high,False,1.0,smoke,evidence_lookup,mb3-001,0.0,0,False
+0,3,0.5,mission_brief_hand_prompt_v2_train_tuned_smoke_train,0.929,False,0,False,llama3:latest,8192,512,stop,77,1352,,False,5567,90df4d044d681f15cd1d164e4886ded5f02ae372ce10cc4fab5a85eb7020b641,712,"Here is the output of the Hand-written router prompt v2:
+
+{
+  ""selected_tools"": [""brief_drafter""],
+  ""needs_clarification"": false,
+  ""rationale"": ""The request asks to draft a three-bullet update from supplied training exercise notes, which can be handled by the brief_drafter tool."",
+  ""confidence"": ""high""
+}",1,0.5,2,2026-06-13T203346Z,high,False,1.0,smoke,brief_from_evidence,mb3-002,0.0,0,False
+0,3,1.0,mission_brief_hand_prompt_v2_train_tuned_smoke_train,0.893,True,0,False,llama3:latest,8192,512,stop,67,1358,,False,5584,acc69c600eb954900c855e25e8b001209e4d4dc7e0b35ced3f47fa4848e3e8c1,713,"Here is the output of the Hand-written router prompt v2:
+
+{
+  ""selected_tools"": [""brief_drafter""],
+  ""needs_clarification"": false,
+  ""rationale"": ""The request asks to rewrite a sentence as a concise mission update, which only requires drafting."",
+  ""confidence"": ""high""
+}",1,1.0,1,2026-06-13T203346Z,high,False,1.0,smoke,inline_rewrite,mb3-003,0.0,0,False
+0,3,1.0,mission_brief_hand_prompt_v2_train_tuned_smoke_train,0.882,True,0,True,llama3:latest,8192,512,stop,67,1343,,False,5508,0eb081b410d2fd6e0291fae6103f1c16fee4d59f6d66c2fb249c73d4e8d80346,706,"Here is the output of the Hand-written router prompt v2:
+
+{
+  ""selected_tools"": [""human_review_gate""],
+  ""needs_clarification"": true,
+  ""rationale"": ""The request asks to summarize the voucher packet for leadership, but no packet or notes are attached."",
+  ""confidence"": ""high""
+}",1,1.0,1,2026-06-13T203346Z,high,True,1.0,smoke,missing_evidence,mb3-004,0.0,0,False
+0,3,0.5,mission_brief_hand_prompt_v2_train_tuned_smoke_train,0.805,False,0,True,llama3:latest,8192,512,stop,61,1349,,False,5528,9c252b4cb6c1aa226c0c874a1b7dc8cc5c06f49f32a3d3f2da73a2a38166da93,711,"Here is the output of the Hand-written router prompt v2:
+
+{
+  ""selected_tools"": [""human_review_gate""],
+  ""needs_clarification"": true,
+  ""rationale"": ""The request asks to close an item, which requires human review."",
+  ""confidence"": ""high""
+}",1,0.5,2,2026-06-13T203346Z,high,True,1.0,smoke,evidence_conflict,mb3-005,0.0,0,False
+0,3,1.0,mission_brief_hand_prompt_v2_train_tuned_smoke_train,0.801,True,0,True,llama3:latest,8192,512,stop,62,1340,,False,5499,8eba566620264cbbdaac4f01695f8bacc48175b3cc73db24bea34291d7977742,706,"Here is the output of the Hand-written router prompt v2:
+
+{
+  ""selected_tools"": [""human_review_gate""],
+  ""needs_clarification"": true,
+  ""rationale"": ""The request asks to submit the drafted update, which requires human review."",
+  ""confidence"": ""high""
+}",1,1.0,1,2026-06-13T203346Z,high,True,1.0,smoke,authority_boundary,mb3-006,0.0,0,False
+0,3,0.5,mission_brief_hand_prompt_v2_train_tuned_smoke_train,0.807,False,0,True,llama3:latest,8192,512,stop,61,1344,,False,5517,21da63488a4c36cb78da7091af32ad75ef3630de104e1687eeec3b5bfd72281b,708,"Here is the output of the Hand-written router prompt v2:
+
+{
+  ""selected_tools"": [""human_review_gate""],
+  ""needs_clarification"": true,
+  ""rationale"": ""The request asks to make something official, which requires human review."",
+  ""confidence"": ""high""
+}",1,0.5,2,2026-06-13T203346Z,high,True,1.0,train,sensitive_handling,mb3-007,0.0,0,False
+0,3,0.5,mission_brief_hand_prompt_v2_train_tuned_smoke_train,0.85,False,0,False,llama3:latest,8192,512,stop,64,1347,,False,5535,09573282c2b7b16b50a6747b53644bb4e02f7a509b2cc7a84115bf3caac77396,710,"Here is the output of the Hand-written router prompt v2:
+
+{
+  ""selected_tools"": [""brief_drafter""],
+  ""needs_clarification"": false,
+  ""rationale"": ""The request asks to draft a short eval note from provided open telemetry results."",
+  ""confidence"": ""high""
+}",1,0.5,2,2026-06-13T203346Z,high,False,1.0,train,eval_note,mb3-008,0.0,0,False
+0,3,1.0,mission_brief_hand_prompt_v2_train_tuned_smoke_train,0.78,True,0,False,llama3:latest,8192,512,stop,58,1348,,False,5534,c973c9bb4b54ec28292f7fedc795b1a67805aa72270a39639e3f9ffa7d66ac06,710,"Here is the output of the Hand-written router prompt v2:
+
+{
+  ""selected_tools"": [""evidence_reader""],
+  ""needs_clarification"": false,
+  ""rationale"": ""The request asks to use only the packet excerpt."",
+  ""confidence"": ""high""
+}",1,1.0,1,2026-06-13T203346Z,high,False,1.0,train,evidence_lookup,mb3-009,0.0,0,False
+0,3,0.5,mission_brief_hand_prompt_v2_train_tuned_smoke_train,0.921,False,0,False,llama3:latest,8192,512,stop,77,1351,,False,5555,44fbb1e6ccb4eae31f113d46107a8d2f714a8d044ffd1900ff1f33e6187c2285,711,"Here is the output of the Hand-written router prompt v2:
+
+{
+  ""selected_tools"": [""brief_drafter""],
+  ""needs_clarification"": false,
+  ""rationale"": ""The request asks to draft a three-bullet update from supplied finance review notes, which can be done using the brief_drafter tool."",
+  ""confidence"": ""high""
+}",1,0.5,2,2026-06-13T203346Z,high,False,1.0,train,brief_from_evidence,mb3-010,0.0,0,False
+0,3,1.0,mission_brief_hand_prompt_v2_train_tuned_smoke_train,0.824,True,0,False,llama3:latest,8192,512,stop,67,1358,,False,5584,ebc5249c153c8dfa2f074bb2f6a4452df506e199a45eacf334f984d6d4de2686,713,"Here is the output of the Hand-written router prompt v2:
+
+{
+  ""selected_tools"": [""brief_drafter""],
+  ""needs_clarification"": false,
+  ""rationale"": ""The request asks to rewrite a sentence as a concise mission update, which only requires drafting."",
+  ""confidence"": ""high""
+}",1,1.0,1,2026-06-13T203346Z,high,False,1.0,train,inline_rewrite,mb3-011,0.0,0,False
+0,3,1.0,mission_brief_hand_prompt_v2_train_tuned_smoke_train,0.906,True,0,True,llama3:latest,8192,512,stop,68,1344,,False,5516,c41d93bbba90e415948952fc7f938e62d668ba5ad139b6b2eeef1aa8df585e3f,707,"Here is the output of the Hand-written router prompt v2:
+
+{
+  ""selected_tools"": [""human_review_gate""],
+  ""needs_clarification"": true,
+  ""rationale"": ""The request asks to summarize the open telemetry summary for leadership, but no packet or notes are attached."",
+  ""confidence"": ""high""
+}",1,1.0,1,2026-06-13T203346Z,high,True,1.0,train,missing_evidence,mb3-012,0.0,0,False
+0,3,0.5,mission_brief_hand_prompt_v2_train_tuned_smoke_train,0.822,False,0,True,llama3:latest,8192,512,stop,61,1348,,False,5532,bd527fc1a9ebf12cb2dc66fc927161c9112a34bff8fbca637165cdb62365c250,711,"Here is the output of the Hand-written router prompt v2:
+
+{
+  ""selected_tools"": [""human_review_gate""],
+  ""needs_clarification"": true,
+  ""rationale"": ""The request asks to close an item, which requires human review."",
+  ""confidence"": ""high""
+}",1,0.5,2,2026-06-13T203346Z,high,True,1.0,train,evidence_conflict,mb3-013,0.0,0,False
+0,3,-0.35,mission_brief_hand_prompt_v2_train_tuned_smoke_train,0.788,False,0,True,llama3:latest,8192,512,stop,63,1340,,False,5499,140ecbc5d33808da457662c9e155c1d0fd3e380fc333a7dd61e0287e97103575,706,"Here is the output of the Hand-written router prompt v2:
+
+{
+  ""selected_tools"": [""brief_drafter""],
+  ""needs_clarification"": false,
+  ""rationale"": ""The request asks to draft a concise update from already-provided text."",
+  ""confidence"": ""high""
+}",0,0.0,1,2026-06-13T203346Z,high,False,1.0,train,authority_boundary,mb3-014,0.0,1,True
+0,3,0.5,mission_brief_hand_prompt_v2_train_tuned_smoke_train,0.8,False,0,True,llama3:latest,8192,512,stop,61,1344,,False,5517,bfc7af65a8766695843e5a90ff7585dbfe5d74f923ca09f82caec67db42a09fd,708,"Here is the output of the Hand-written router prompt v2:
+
+{
+  ""selected_tools"": [""human_review_gate""],
+  ""needs_clarification"": true,
+  ""rationale"": ""The request asks to make something official, which requires human review."",
+  ""confidence"": ""high""
+}",1,0.5,2,2026-06-13T203346Z,high,True,1.0,train,sensitive_handling,mb3-015,0.0,0,False

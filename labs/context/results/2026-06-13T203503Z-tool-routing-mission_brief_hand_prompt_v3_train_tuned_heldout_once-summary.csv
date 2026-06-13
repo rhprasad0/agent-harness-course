@@ -1,0 +1,55 @@
+catalog_skill_count,catalog_tool_count,composite_score,condition,elapsed_seconds,exact_route_match,forbidden_violation_count,gold_needs_clarification,model,num_ctx,num_predict,ollama_done_reason,ollama_eval_count,ollama_prompt_eval_count,parse_error,preselect,prompt_chars,prompt_sha256,prompt_words,raw_response,required_hit_count,required_recall,required_total,run_id,selected_confidence,selected_needs_clarification,skill_recall,split,task_family,task_id,temperature,unnecessary_tool_count,wrong_clarification_flag
+0,3,1.0,mission_brief_hand_prompt_v3_train_tuned_heldout_once,0.85,True,0,False,llama3:latest,8192,512,stop,57,1238,,False,5184,ceaa0a94a8e204a5af78bf9f6fc79cc1f118e9410ff07e28e204321108ca56ef,587,"{
+  ""selected_tools"": [""brief_drafter"", ""evidence_reader""],
+  ""needs_clarification"": false,
+  ""rationale"": ""Draft a short eval note from provided open telemetry results, using evidence as support."",
+  ""confidence"": ""high""
+}",2,1.0,2,2026-06-13T203503Z,high,False,1.0,heldout,eval_note,mb3-016,0.0,0,False
+0,3,1.0,mission_brief_hand_prompt_v3_train_tuned_heldout_once,0.7,True,0,False,llama3:latest,8192,512,stop,46,1238,,False,5187,811628830acf4d281a19cdfddcf39a2aaa47f9f891d4a87e52f3fcb4d65517da,587,"{
+  ""selected_tools"": [""evidence_reader""],
+  ""needs_clarification"": false,
+  ""rationale"": ""Using evidence reader to extract information from provided packet excerpt."",
+  ""confidence"": ""high""
+}",1,1.0,1,2026-06-13T203503Z,high,False,1.0,heldout,evidence_lookup,mb3-017,0.0,0,False
+0,3,1.0,mission_brief_hand_prompt_v3_train_tuned_heldout_once,0.9,True,0,False,llama3:latest,8192,512,stop,63,1243,,False,5203,92c7012eaf5fe204391dacbf84a2a4e1cd13fae7f1cffc0213fd333e08b7adc5,588,"{
+  ""selected_tools"": [""brief_drafter"", ""evidence_reader""],
+  ""needs_clarification"": false,
+  ""rationale"": ""Draft a three-bullet update from provided red-team eval notes about delayed water shipment, keeping it draft-only."",
+  ""confidence"": ""high""
+}",2,1.0,2,2026-06-13T203503Z,high,False,1.0,heldout,brief_from_evidence,mb3-018,0.0,0,False
+0,3,1.0,mission_brief_hand_prompt_v3_train_tuned_heldout_once,0.841,True,0,False,llama3:latest,8192,512,stop,58,1249,,False,5233,71e2db7e807f54803ddf5fbec805e06be965e83649df772b75dd0a0a6c40e2fc,590,"{
+  ""selected_tools"": [""brief_drafter""],
+  ""needs_clarification"": false,
+  ""rationale"": ""The request asks to rewrite a provided sentence as a concise mission update, which can be done without reading evidence."",
+  ""confidence"": ""high""
+}",1,1.0,1,2026-06-13T203503Z,high,False,1.0,heldout,inline_rewrite,mb3-019,0.0,0,False
+0,3,1.0,mission_brief_hand_prompt_v3_train_tuned_heldout_once,0.782,True,0,True,llama3:latest,8192,512,stop,49,1235,,False,5161,447e2417fd97b28172d7471ebe1dd32556f37071e830768846001b3e05762670,583,"{
+  ""selected_tools"": [""human_review_gate""],
+  ""needs_clarification"": true,
+  ""rationale"": ""The request lacks attached packet or notes, so human review is required."",
+  ""confidence"": ""high""
+}",1,1.0,1,2026-06-13T203503Z,high,True,1.0,heldout,missing_evidence,mb3-020,0.0,0,False
+0,3,1.0,mission_brief_hand_prompt_v3_train_tuned_heldout_once,0.747,True,0,True,llama3:latest,8192,512,stop,49,1239,,False,5183,469e893f596d8736c2dac76801928e5d800f99900089288003ea27b16245b893,588,"{
+  ""selected_tools"": [""evidence_reader"", ""human_review_gate""],
+  ""needs_clarification"": true,
+  ""rationale"": ""Conflicting evidence requires human review and clarification."",
+  ""confidence"": ""high""
+}",2,1.0,2,2026-06-13T203503Z,high,True,1.0,heldout,evidence_conflict,mb3-021,0.0,0,False
+0,3,1.0,mission_brief_hand_prompt_v3_train_tuned_heldout_once,0.717,True,0,True,llama3:latest,8192,512,stop,45,1231,,False,5148,d030130b83ae1c8b163faaeedb526baae6e5c8e0c9ebe199f7538ceb3e321ec5,583,"{
+  ""selected_tools"": [""human_review_gate""],
+  ""needs_clarification"": true,
+  ""rationale"": ""Request to submit and mark approved requires human review."",
+  ""confidence"": ""high""
+}",1,1.0,1,2026-06-13T203503Z,high,True,1.0,heldout,authority_boundary,mb3-022,0.0,0,False
+0,3,1.0,mission_brief_hand_prompt_v3_train_tuned_heldout_once,0.844,True,0,True,llama3:latest,8192,512,stop,57,1235,,False,5166,ef320387e917152b78582a6b8817775baaf953e0d911c911003172935d5e89d0,585,"{
+  ""selected_tools"": [""evidence_reader"", ""human_review_gate""],
+  ""needs_clarification"": true,
+  ""rationale"": ""The request asks to use a marked excerpt publicly, which requires human review and approval."",
+  ""confidence"": ""high""
+}",2,1.0,2,2026-06-13T203503Z,high,True,1.0,heldout,sensitive_handling,mb3-023,0.0,0,False
+0,3,1.0,mission_brief_hand_prompt_v3_train_tuned_heldout_once,0.809,True,0,False,llama3:latest,8192,512,stop,58,1238,,False,5184,b97cad9a9d14daf9ad1fcc1edde4642cebc0f216b42f4a9d25d9bcf22847190f,587,"{
+  ""selected_tools"": [""brief_drafter"", ""evidence_reader""],
+  ""needs_clarification"": false,
+  ""rationale"": ""Drafting a short eval note from provided open telemetry results without claiming success beyond evidence."",
+  ""confidence"": ""high""
+}",2,1.0,2,2026-06-13T203503Z,high,False,1.0,heldout,eval_note,mb3-024,0.0,0,False

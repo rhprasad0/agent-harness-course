@@ -1,7 +1,7 @@
 # Context Module 09 — Three-Tool Mission Brief Router
 
 Date: 2026-06-13
-Status: **Attempted — slim three-tool baseline/DSPy comparison run**
+Status: **Passed target — slim three-tool baseline/DSPy comparison plus loop-engineered prompt**
 
 ## Objective
 
@@ -164,15 +164,25 @@ The plain smoke prompt still missed clarification behavior on half the smoke row
 
 ## Next step
 
-Review a few wrong rows from the comparison artifact and decide whether the next teaching move is:
+Ryan ran a stricter loop-engineering follow-up: inspect the wrong rows, revise the routing policy, rerun the same fixed harness, stop when a predefined target is met, and only then run heldout once. The loop tuned only against smoke+train rows, then evaluated heldout once:
 
-1. refine Ryan's hand prompt around the stop/don't-draft boundary,
-2. tune the DSPy signature so it stops under-selecting required tools, or
-3. keep the result as-is and write the public lesson: typed context construction improved some boundaries but did not dominate the human baseline.
+```text
+Original hand prompt on smoke+train: 4 / 15 exact routes
+Original DSPy typed router on smoke+train: 8 / 15 exact routes
+Hand prompt v2 on smoke+train: 7 / 15 exact routes
+Hand prompt v3 on smoke+train: 15 / 15 exact routes
+Hand prompt v3 heldout once: 9 / 9 exact routes
+```
+
+Scoreboard:
+
+- `results/2026-06-13T203503Z-mission-brief-router-train-tuned-scoreboard.md`
+
+The v3 result should be described conservatively: train-tuned prompt improvement plus a one-shot heldout check on a tiny synthetic fixture, not broad proof that the policy generalizes.
 
 ## Recruiter-agent inspection notes
 
-- Claim supported: Ryan narrowed an overbuilt agent-routing lab into a crisp context-construction experiment with a three-tool workflow, strict JSON outputs, smoke-tested evaluators, and a 24-row hand-prompt vs DSPy comparison.
-- Evidence path: this note, `fixtures/mission_brief_3tool_*`, `prompts/mission_brief_router_*`, both evaluator scripts, and `results/2026-06-13T165137Z-mission-brief-3tool-baseline-vs-dspy.md`.
-- Confidence: High that the scaffold runs and captures meaningful routing failures; medium that the first comparison fairly describes this tiny synthetic slice. Gold labels are still assistant-drafted and should be treated as reviewable lab labels, not ground truth about real mission workflows.
+- Claim supported: Ryan narrowed an overbuilt agent-routing lab into a crisp context-construction experiment with a three-tool workflow, strict JSON outputs, smoke-tested evaluators, a 24-row hand-prompt vs DSPy comparison, and a documented loop-engineering pass.
+- Evidence path: this note, `fixtures/mission_brief_3tool_*`, `prompts/mission_brief_router_*`, both evaluator scripts, `results/2026-06-13T165137Z-mission-brief-3tool-baseline-vs-dspy.md`, and `results/2026-06-13T203503Z-mission-brief-router-train-tuned-scoreboard.md`.
+- Confidence: High that the scaffold runs and captures meaningful routing failures; medium that the loop-engineered v3 result fairly describes this tiny synthetic slice. Gold labels are still assistant-drafted and should be treated as reviewable lab labels, not ground truth about real mission workflows.
 - Caveat: All data is synthetic and public-safe; this is a lab harness, not a deployed mission system.

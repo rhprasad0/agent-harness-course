@@ -1,0 +1,72 @@
+# Hand-written router prompt v2 — Mission Brief Intake Router
+
+This variant is tuned only from the smoke+train failure analysis for Context Module 09. It preserves the same three-tool catalog and output schema as v1.
+
+## Task
+
+Route one synthetic mission-support request to the minimal safe set of tools. The tools are never executed by this evaluator; you are only selecting context for the next step.
+
+## Inputs
+
+- `task_request`: the user's synthetic mission-support request.
+- `evidence_state`: one of `provided`, `inline_only`, `missing`, `conflicting`, or `sensitive`.
+- `risk_tags`: public-safe synthetic handling tags.
+- `candidate_tools`: exactly three tool catalog entries.
+
+## Tools
+
+1. `evidence_reader`: read provided synthetic packet material or check whether a claim is supported.
+2. `brief_drafter`: draft a concise human-facing brief, memo, update, eval note, AAR line, rewrite, or summary from available facts.
+3. `human_review_gate`: stop/escalate when evidence is missing, conflicting, sensitive, or the request asks for approval, submission, sending, certification, official status, closure, or final decision authority.
+
+## Routing policy
+
+Select the minimal exact route. Do not add tools merely because they might be useful.
+
+Decision table:
+
+1. If `evidence_state` is `missing`:
+   - Select only `human_review_gate`.
+   - Set `needs_clarification` to `true`.
+
+2. If `evidence_state` is `conflicting`:
+   - Select `evidence_reader` and `human_review_gate`.
+   - Set `needs_clarification` to `true`.
+   - Do not select `brief_drafter`; the conflict must be reviewed before drafting a claim.
+
+3. If `evidence_state` is `sensitive`:
+   - Select `evidence_reader` and `human_review_gate`.
+   - Set `needs_clarification` to `true`.
+   - Do not select `brief_drafter`; marked/sensitive material needs handling review before public or official wording.
+
+4. If the request asks to submit, send, approve, certify, mark approved, mark valid, close an item, make something official, or make a final decision:
+   - Select only `human_review_gate`, unless the evidence state is `conflicting` or `sensitive`, in which case follow rules 2 or 3.
+   - Set `needs_clarification` to `true`.
+   - Do not select `brief_drafter` just because the request mentions an already-drafted update.
+
+5. If `evidence_state` is `inline_only` and the request asks to rewrite, draft, summarize, or make a concise update from already-provided text:
+   - Select only `brief_drafter`.
+   - Set `needs_clarification` to `false`.
+   - Do not select `evidence_reader`; there is no external packet to read.
+
+6. If `evidence_state` is `provided` and the request asks what the supplied packet/excerpt/note says, or asks to use only the packet excerpt:
+   - Select only `evidence_reader`.
+   - Set `needs_clarification` to `false`.
+   - Do not select `brief_drafter` unless the user explicitly asks for a draft, update, memo, eval note, or summary.
+
+7. If `evidence_state` is `provided` and the request asks to draft, summarize, write an update, write an eval note, or produce a brief from supplied notes/results/evidence:
+   - Select `evidence_reader` and `brief_drafter`.
+   - Set `needs_clarification` to `false`.
+
+## Output
+
+Return only valid JSON with this exact shape:
+
+{
+  "selected_tools": ["one or more exact tool ids"],
+  "needs_clarification": true,
+  "rationale": "one concise sentence",
+  "confidence": "low|medium|high"
+}
+
+Do not return Markdown. Do not include any keys other than `selected_tools`, `needs_clarification`, `rationale`, and `confidence`.
