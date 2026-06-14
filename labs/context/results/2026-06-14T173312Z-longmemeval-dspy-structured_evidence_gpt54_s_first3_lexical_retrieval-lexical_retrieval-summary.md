@@ -1,0 +1,76 @@
+# LongMemEval DSPy Run Summary
+
+Run ID: `2026-06-14T173312Z`
+Condition: `structured_evidence_gpt54_s_first3_lexical_retrieval`
+Dataset: `labs/context/data/longmemeval/longmemeval_s_cleaned.json`
+Model: `ollama_chat/llama3:latest`
+Reader / context format: `evidence_answer` / `structured`
+Context policy: `lexical_retrieval`
+Judge provider/model: `codex-bridge` / `gpt-5.4`
+Limit / offset / repeats: `3` / `0` / `5`
+
+## Aggregate
+
+| Policy | Rows | Questions | Repeats | GPT-4o judge acc | Judge errors | Heuristic acc | Mean F1 | Recall any@3 | Recall all@3 | NDCG any@3 | MRR | SGI | Parse errors | Mean context words | Mean elapsed sec |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| lexical_retrieval | 15 | 3 | 5 | 0.000 | 0 | 0.000 | 0.000 | 0.333 | 0.333 | 0.333 | 0.333 | n/a | 0 | 2032.7 | 1.96 |
+
+## Notes
+
+- Headline QA accuracy is GPT-4o judge accuracy when `--judge-provider codex-bridge --judge-model gpt-4o` succeeds.
+- Local heuristic correctness and token F1 are diagnostics, not official LongMemEval scoring.
+- Embedding semantic grounding is diagnostic and not an official LongMemEval score.
+- Official-compatible per-repeat hypothesis JSONL files are written for audit/re-evaluation.
+- DSPy/LiteLLM does not expose Ollama `prompt_eval_count` here, so the summary reports context words/chars instead.
+
+## Row sample
+
+### e47becba repeat 1
+
+- Type: `single-session-user`
+- Question: What degree did I graduate with?
+- Gold: Business Administration
+- Pred: I don't know.
+- Evidence quote: I'm thinking of having a dedicated area for working from home, and also a comfortable reading nook with a floor lamp and a plush armchair.
+- GPT-4o judge correct: `False`; judge error: ``
+- Heuristic correct: `False`; F1: `0.000`; evidence hit: `False`
+
+### 118b2229 repeat 1
+
+- Type: `single-session-user`
+- Question: How long is my daily commute to work?
+- Gold: 45 minutes each way
+- Pred: I don't know
+- Evidence quote: I've been keeping a music journal to track what I've been listening to and what I think of it, which has been helpful in identifying patterns in my listening habits.
+- GPT-4o judge correct: `False`; judge error: ``
+- Heuristic correct: `False`; F1: `0.000`; evidence hit: `False`
+
+### 51a45a95 repeat 1
+
+- Type: `single-session-user`
+- Question: Where did I redeem a $5 coupon on coffee creamer?
+- Gold: Target
+- Pred: last Sunday
+- Evidence quote: I actually redeemed a $5 coupon on coffee creamer last Sunday...
+- GPT-4o judge correct: `False`; judge error: ``
+- Heuristic correct: `False`; F1: `0.000`; evidence hit: `True`
+
+### e47becba repeat 2
+
+- Type: `single-session-user`
+- Question: What degree did I graduate with?
+- Gold: Business Administration
+- Pred: I don't know.
+- Evidence quote: I'm thinking of having a dedicated area for working from home, and also a comfortable reading nook with a floor lamp and a plush armchair.
+- GPT-4o judge correct: `False`; judge error: ``
+- Heuristic correct: `False`; F1: `0.000`; evidence hit: `False`
+
+### 118b2229 repeat 2
+
+- Type: `single-session-user`
+- Question: How long is my daily commute to work?
+- Gold: 45 minutes each way
+- Pred: I don't know
+- Evidence quote: NOT_FOUND
+- GPT-4o judge correct: `False`; judge error: ``
+- Heuristic correct: `False`; F1: `0.000`; evidence hit: `False`

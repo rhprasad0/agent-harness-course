@@ -1,0 +1,30 @@
+{
+  "policies": {
+    "marked_answer_turns": {
+      "evidence_hit_rate": 1.0,
+      "heuristic_accuracy": 0.0,
+      "heuristic_accuracy_stdev": 0.0,
+      "judge_accuracy": 0.0,
+      "judge_accuracy_stdev": 0.0,
+      "judge_errors": 0,
+      "judged_rows": 1,
+      "mean_answer_semantic_similarity": null,
+      "mean_context_words": 138.0,
+      "mean_elapsed_sec": 0.493241765001585,
+      "mean_gold_context_similarity": null,
+      "mean_mrr": 1.0,
+      "mean_ndcg_any@3": 0.7653606369886217,
+      "mean_pred_context_similarity": null,
+      "mean_recall_all@3": 0.0,
+      "mean_recall_any@3": 1.0,
+      "mean_semantic_grounding_index": null,
+      "mean_token_f1": 0.0,
+      "parse_errors": 0,
+      "rows": 1,
+      "semantic_metric_errors": 0
+    }
+  },
+  "question_ids": 1,
+  "repeats": 1,
+  "rows": 1
+}

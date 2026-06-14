@@ -1,6 +1,6 @@
 # Prompt Engineering Labs
 
-Status: **Passed — three lab slices**
+Status: **Complete — three lab slices**
 
 Ryan started from the top of the curriculum here and now has three completed prompt-lab slices with public-safe evidence.
 
@@ -8,7 +8,7 @@ Ryan started from the top of the curriculum here and now has three completed pro
 
 - Keep completed prompt-lab evidence inspectable and conservative.
 - Use the AI assistant Socratically: hypothesis first, hints second, direct execution when needed.
-- Next: use the prompt-lab evidence as a baseline while moving into Context Engineering.
+- Next: use the prompt-lab evidence as a baseline while moving into Harness Engineering.
 
 ## Evidence log
 

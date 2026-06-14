@@ -4,3 +4,6 @@ __pycache__/
 
 # Local editor/OS noise
 .DS_Store
+
+# Large local benchmark datasets
+labs/context/data/

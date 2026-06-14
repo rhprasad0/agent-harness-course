@@ -8,9 +8,9 @@ The curriculum itself lives in [`../index.html`](../index.html) and at [`harness
 
 | Area | Status | Notes |
 |---|---:|---|
-| [Prompt Engineering](./prompt/) | Passed — three lab slices | Completed a recruiter-facing few-shot order-sensitivity lab, a GSM8K self-consistency harness run, and an automatic prompt optimization / GEPA lab with conservative negative held-out evidence. |
-| [Context Engineering](./context/) | In progress — first slice passed, Module 09 loop-engineered router | Built a local Ollama/Llama2 context-rot harness. Clean-window run did not support lost-in-the-middle on the fixed synthetic fact; boundary run showed why recording actual `prompt_eval_count` matters. Narrowed the Context Module 09 router to three tools, compared Ryan's hand prompt against uncompiled DSPy, then used loop engineering — inspect failures, revise prompt, rerun fixed harness — to reach 15/15 on smoke+train and 9/9 on one heldout check. |
-| [Harness Engineering](./harness/) | Planned | Not started yet. |
+| [Prompt Engineering](./prompt/) | Complete — three lab slices | Completed a recruiter-facing few-shot order-sensitivity lab, a GSM8K self-consistency harness run, and an automatic prompt optimization / GEPA lab with conservative negative held-out evidence. |
+| [Context Engineering](./context/) | Complete — LongMemEval/DSPy final-lab slice wrapped | Built a local Ollama/Llama2 context-rot harness; narrowed the Context Module 09 router to three tools; loop-engineered the router prompt to 15/15 on smoke+train and 9/9 heldout once; then wrapped Module 12 with the real LongMemEval cleaned dataset and a simple DSPy reader. The non-official Codex `gpt-5.4` judged rerun confirmed the frozen-reader weakness, and structured context plus evidence-first output improved `answer_sessions` from 0/3 to 1/3 on the first-three dev slice. |
+| [Harness Engineering](./harness/) | Not started — planned labs listed | Planned labs are documented, but no Harness Engineering lab evidence has been produced yet. |
 | [Capstone](./capstone/) | Planned | Not started yet. |
 
 ## Lab note standard
